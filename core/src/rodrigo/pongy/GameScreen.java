@@ -19,8 +19,6 @@ public class GameScreen implements Screen {
 
 	private PreferencesManager preferencesManager;
 
-	private OrthographicCamera camera;
-
 	private Racket leftRacket;
 	private Racket rightRacket;
 
@@ -33,7 +31,6 @@ public class GameScreen implements Screen {
 		racketsYMargin = Gdx.graphics.getHeight() / 30f;
 
 		batch = new SpriteBatch();
-		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		preferencesManager = new PreferencesManager("Pongy");
 
 		preferencesManager.setUpDefaultControls(false);
@@ -41,8 +38,6 @@ public class GameScreen implements Screen {
 
 		racketInputProcessor = new RacketInputProcessor(leftRacket, rightRacket, preferencesManager);
 
-
-		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
 	}
 
@@ -56,9 +51,6 @@ public class GameScreen implements Screen {
 	public void render(float delta) {
 
 		clearScreen();
-
-		batch.setProjectionMatrix(camera.combined);
-		camera.update();
 
 		racketInputProcessor.checkKeyInput();
 		racketInputProcessor.checkTouchInput();
@@ -107,13 +99,11 @@ public class GameScreen implements Screen {
 		leftRacket = new Racket(
 				new Texture("objects/racket.png"),
 				Racket.POSITIONS.LEFT,
-				camera,
 				racketsScale,
 				racketsYMargin);
 		rightRacket = new Racket(
 				new Texture("objects/racket.png"),
 				Racket.POSITIONS.RIGHT,
-				camera,
 				racketsScale,
 				racketsYMargin);
 	}
