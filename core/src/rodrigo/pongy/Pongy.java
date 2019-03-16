@@ -6,48 +6,77 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import rodrigo.pongy.input.MainInputProcessor;
+import rodrigo.pongy.input.RacketInputProcessor;
 import rodrigo.pongy.object.Racket;
 import rodrigo.pongy.settings.PreferencesManager;
 
 public class Pongy extends ApplicationAdapter {
 
 	private SpriteBatch batch;
-	private MainInputProcessor mainInputProcessor;
+
+	private RacketInputProcessor racketInputProcessor;
+
 	private PreferencesManager prefManager;
 
 	private Racket leftRacket;
 	private Racket rightRacket;
 
 	private float racketScale;
+	private float racketYScreenMargin;
 
-
-	// Current hardcoded keys (Player: Up / Down)
-	// P1: W / S
-	// P2: UpArrow / DownArrow
 
 	// Initialisation
 	@Override
 	public void create() {
-		batch = new SpriteBatch();
-		mainInputProcessor = new MainInputProcessor();
 		prefManager = new PreferencesManager("Pongy");
 
-		Gdx.input.setInputProcessor(mainInputProcessor);
+		batch = new SpriteBatch();
 
-		racketScale = 1f;
-
+		racketScale = Gdx.graphics.getWidth() / 200;
+		racketYScreenMargin = Gdx.graphics.getHeight() / 30;
 
 		leftRacket = new Racket(
 				new Texture("objects/racket.png"),
-				racketScale,
 				Racket.POSITIONS.LEFT,
-				prefManager);
+				racketScale,
+				racketYScreenMargin);
 		rightRacket = new Racket(
 				new Texture("objects/racket.png"),
+				Racket.POSITIONS.RIGHT,
 				racketScale,
-				Racket.POSITIONS.LEFT,
-				prefManager);
+				racketYScreenMargin);
+
+
+		racketInputProcessor = new RacketInputProcessor(leftRacket, rightRacket, prefManager);
+
+		// If the racket controls aren't set, set them to the defaults
+		// Defaults are (MOVE_UP / MOVE_DOWN format):
+		// W / S for the left racket
+		// UpArrow / DownArrow for the right racket
+		if (prefManager.getRacketControl(Racket.POSITIONS.LEFT, Racket.ACTIONS.MOVE_UP) == -1) {
+
+			prefManager.setRacketControl(
+					Racket.POSITIONS.LEFT, Racket.ACTIONS.MOVE_UP,
+					Input.Keys.W);
+		}
+		if (prefManager.getRacketControl(Racket.POSITIONS.LEFT, Racket.ACTIONS.MOVE_DOWN) == -1) {
+
+			prefManager.setRacketControl(
+					Racket.POSITIONS.LEFT, Racket.ACTIONS.MOVE_DOWN,
+					Input.Keys.S);
+		}
+		if (prefManager.getRacketControl(Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_UP) == -1) {
+
+			prefManager.setRacketControl(
+					Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_UP,
+					Input.Keys.UP);
+		}
+		if (prefManager.getRacketControl(Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_DOWN) == -1) {
+
+			prefManager.setRacketControl(
+					Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_DOWN,
+					Input.Keys.DOWN);
+		}
 
 	}
 
@@ -55,7 +84,7 @@ public class Pongy extends ApplicationAdapter {
 	public void render() {
 		clearScreen();
 
-		mainInputProcessor.updateEvents();
+		racketInputProcessor.checkInput();
 
 		batch.begin();
 
@@ -72,6 +101,8 @@ public class Pongy extends ApplicationAdapter {
 	@Override
 	public void dispose() {
 		batch.dispose();
+		leftRacket.dispose();
+		rightRacket.dispose();
 	}
 
 	// Clears the screen

@@ -58,6 +58,8 @@ public class PreferencesManager {
 				Gdx.app.exit();
 				break;
 		}
+
+		preferences.flush();
 	}
 
 	public int getRacketControl(Racket.POSITIONS racketPosition, Racket.ACTIONS action) {
@@ -66,9 +68,9 @@ public class PreferencesManager {
 			case LEFT:
 				switch (action) {
 					case MOVE_UP:
-						return preferences.getInteger("LEFT-MOVE_UP");
+						return preferences.getInteger("LEFT-MOVE_UP", -1);
 					case MOVE_DOWN:
-						return preferences.getInteger("LEFT-MOVE_DOWN");
+						return preferences.getInteger("LEFT-MOVE_DOWN", -1);
 					default:
 						Gdx.app.error(this.hashCode() + "", "Invalid racket action.");
 						Gdx.app.exit();
@@ -79,9 +81,9 @@ public class PreferencesManager {
 			case RIGHT:
 				switch (action) {
 					case MOVE_UP:
-						return preferences.getInteger("RIGHT-MOVE_UP");
+						return preferences.getInteger("RIGHT-MOVE_UP", -1);
 					case MOVE_DOWN:
-						return preferences.getInteger("RIGHT-MOVE_DOWN");
+						return preferences.getInteger("RIGHT-MOVE_DOWN", -1);
 					default:
 						Gdx.app.error(this.hashCode() + "", "Invalid racket action.");
 						Gdx.app.exit();
@@ -94,7 +96,7 @@ public class PreferencesManager {
 				break;
 		}
 
-		// Hopefully this statement will never be executed.
+		// I don't think this statement is even reachable...
 		return -1;
 	}
 }
