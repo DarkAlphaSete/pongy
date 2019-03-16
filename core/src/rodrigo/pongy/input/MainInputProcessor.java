@@ -3,17 +3,15 @@ package rodrigo.pongy.input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
-import com.badlogic.gdx.utils.ObjectMap;
 import rodrigo.pongy.event.RacketMovementListener;
-import rodrigo.pongy.object.Racket;
 
 
 public class MainInputProcessor implements InputProcessor {
 
 
 	// REFERENCE:
-	// <Listener, <ACTION, KEYCODE>>
-	private Array<ObjectMap<RacketMovementListener, ObjectMap<Racket.ACTIONS, Integer>>> racketMovementListeners;
+	private Array<RacketMovementListener> racketMovementListeners;
+
 
 	// Stores the keys that are held down
 	private IntArray heldKeys;
@@ -22,38 +20,22 @@ public class MainInputProcessor implements InputProcessor {
 	// Initialisation
 	public MainInputProcessor() {
 		heldKeys = new IntArray();
-		racketMovementListeners = new Array<ObjectMap<RacketMovementListener, ObjectMap<Racket.ACTIONS, Integer>>>();
+		racketMovementListeners = new Array<RacketMovementListener>();
 
 	}
 
 	// Adds a RacketMovementListener to the respective subscriber list
-	public void subscribeToRacketMovement(RacketMovementListener newSubscriber, ObjectMap<Racket.ACTIONS, Integer> movementKeys) {
-		ObjectMap<RacketMovementListener, ObjectMap<Racket.ACTIONS, Integer>> map = new ObjectMap<RacketMovementListener, ObjectMap<Racket.ACTIONS, Integer>>();
+	public void subscribeToRacketMovement(RacketMovementListener newSubscriber, int upKeycode, int downKeyCode) {
 
-		map.put(newSubscriber, movementKeys);
-
-		racketMovementListeners.add(map);
+		racketMovementListeners.add(newSubscriber);
 	}
 
 	// Update and execute event action
 	public void updateEvents() {
 
 		// Fire events for racket movement subscribers if the keys match
-		if (!heldKeys.isEmpty()) {
-			for (ObjectMap<RacketMovementListener, ObjectMap<Racket.ACTIONS, Integer>> map : racketMovementListeners) {
-				for (RacketMovementListener listener : map.keys()) {
-					for (Integer keycode : heldKeys.items) {
 
-						if (map.get(listener).get(Racket.ACTIONS.MOVE_DOWN).equals(keycode)) {
-							listener.moveDownPressed(listener);
-						} else if (map.get(listener).get(Racket.ACTIONS.MOVE_UP).equals(keycode)) {
-							listener.moveUpPressed(listener);
-						}
-					}
-				}
-			}
 
-		}
 	}
 
 	@Override
