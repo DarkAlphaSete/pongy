@@ -1,6 +1,7 @@
 package rodrigo.pongy.input;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import rodrigo.pongy.object.Racket;
 import rodrigo.pongy.settings.PreferencesManager;
 
@@ -54,5 +55,19 @@ public class RacketInputProcessor {
 	}
 
 
+	public void checkTouchInput() {
+
+		if(Gdx.input.isTouched()) {
+
+			// = Left side of the screen
+			if(Gdx.input.getX() < Gdx.graphics.getWidth() / 2) {
+				leftRacket.draggedMove(Gdx.input.getY());
+			}
+			// = Right side of the screen
+			else {
+				rightRacket.draggedMove(Gdx.input.getY());
+			}
+		}
+	}
 
 }

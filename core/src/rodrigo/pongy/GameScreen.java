@@ -3,6 +3,7 @@ package rodrigo.pongy;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import rodrigo.pongy.input.RacketInputProcessor;
@@ -18,6 +19,8 @@ public class GameScreen implements Screen {
 
 	private PreferencesManager preferencesManager;
 
+	private OrthographicCamera camera;
+
 	private Racket leftRacket;
 	private Racket rightRacket;
 
@@ -30,12 +33,16 @@ public class GameScreen implements Screen {
 		racketsYMargin = Gdx.graphics.getHeight() / 30f;
 
 		batch = new SpriteBatch();
+		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		preferencesManager = new PreferencesManager("Pongy");
 
 		preferencesManager.setUpDefaultControls(false);
 		initialiseRackets();
 
 		racketInputProcessor = new RacketInputProcessor(leftRacket, rightRacket, preferencesManager);
+
+
+		camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
 	}
 
@@ -50,7 +57,11 @@ public class GameScreen implements Screen {
 
 		clearScreen();
 
+		batch.setProjectionMatrix(camera.combined);
+		camera.update();
+
 		racketInputProcessor.checkKeyInput();
+		racketInputProcessor.checkTouchInput();
 
 		batch.begin();
 
@@ -96,11 +107,13 @@ public class GameScreen implements Screen {
 		leftRacket = new Racket(
 				new Texture("objects/racket.png"),
 				Racket.POSITIONS.LEFT,
+				camera,
 				racketsScale,
 				racketsYMargin);
 		rightRacket = new Racket(
 				new Texture("objects/racket.png"),
 				Racket.POSITIONS.RIGHT,
+				camera,
 				racketsScale,
 				racketsYMargin);
 	}
