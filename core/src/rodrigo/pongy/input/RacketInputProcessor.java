@@ -4,33 +4,34 @@ import com.badlogic.gdx.Gdx;
 import rodrigo.pongy.object.Racket;
 import rodrigo.pongy.settings.PreferencesManager;
 
+
 public class RacketInputProcessor {
 
-	private PreferencesManager prefManager;
+	private PreferencesManager preferencesManager;
 
 	private Racket leftRacket;
 	private Racket rightRacket;
 
 
-	public RacketInputProcessor(Racket leftRacket, Racket rightRacket, PreferencesManager prefManager) {
-		this.prefManager = prefManager;
+	public RacketInputProcessor(Racket leftRacket, Racket rightRacket, PreferencesManager preferencesManager) {
+		this.preferencesManager = preferencesManager;
 
 		this.leftRacket = leftRacket;
 		this.rightRacket = rightRacket;
 
 	}
 
-	public void checkInput() {
+	public void checkKeyInput() {
 
 		// Left racket
 		if (Gdx.input.isKeyPressed(
-				prefManager.getRacketControl(
+				preferencesManager.getRacketControl(
 						Racket.POSITIONS.LEFT, Racket.ACTIONS.MOVE_DOWN))) {
 
 			leftRacket.moveDownPressed();
 		}
 		if (Gdx.input.isKeyPressed(
-				prefManager.getRacketControl(
+				preferencesManager.getRacketControl(
 						Racket.POSITIONS.LEFT, Racket.ACTIONS.MOVE_UP))) {
 
 			leftRacket.moveUpPressed();
@@ -38,18 +39,20 @@ public class RacketInputProcessor {
 
 		// Right racket
 		if (Gdx.input.isKeyPressed(
-				prefManager.getRacketControl(
-				Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_DOWN))) {
+				preferencesManager.getRacketControl(
+						Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_DOWN))) {
 
 			rightRacket.moveDownPressed();
 		}
 		if (Gdx.input.isKeyPressed(
-				prefManager.getRacketControl(
-				Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_UP))) {
+				preferencesManager.getRacketControl(
+						Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_UP))) {
 
 			rightRacket.moveUpPressed();
 		}
 
 	}
+
+
 
 }

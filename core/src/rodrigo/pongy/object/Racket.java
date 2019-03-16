@@ -3,9 +3,10 @@ package rodrigo.pongy.object;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import rodrigo.pongy.settings.PreferencesManager;
+
 
 public class Racket {
+
 
 	public enum ACTIONS {
 		MOVE_UP, MOVE_DOWN
@@ -15,26 +16,28 @@ public class Racket {
 		LEFT, RIGHT,
 	}
 
+
 	private Sprite racket;
 	private float movementSpeed;
 	private float yScreenMargin;
 
-	// Initialisation
+
 	public Racket(Texture texture, POSITIONS position, float scaleFactor, float yScreenMargin) {
 		racket = new Sprite(texture);
 		racket.setSize(racket.getWidth() * scaleFactor, racket.getHeight() * scaleFactor);
 
-		movementSpeed = 150f;
+		//movementSpeed = 150f;
+		movementSpeed = Gdx.graphics.getWidth() * Gdx.graphics.getHeight() / 550f;
 		this.yScreenMargin = yScreenMargin;
 
 		switch (position) {
 
 			case LEFT:
-				racket.setPosition(racket.getWidth() / 4, Gdx.graphics.getHeight() / 2 - racket.getHeight() / 2);
+				racket.setPosition(racket.getWidth() / 4, Gdx.graphics.getHeight() / 2f - racket.getHeight() / 2);
 				break;
 
 			case RIGHT:
-				racket.setPosition(Gdx.graphics.getWidth() - racket.getWidth() - racket.getWidth() / 4, Gdx.graphics.getHeight() / 2 - racket.getHeight() / 2);
+				racket.setPosition(Gdx.graphics.getWidth() - racket.getWidth() - racket.getWidth() / 4, Gdx.graphics.getHeight() / 2f - racket.getHeight() / 2);
 				break;
 
 			default:
@@ -42,8 +45,6 @@ public class Racket {
 				Gdx.app.exit();
 				break;
 		}
-
-		Gdx.app.log("", "" + racket.getX());
 
 	}
 
@@ -61,13 +62,11 @@ public class Racket {
 		//Gdx.app.log(this.hashCode() + "", "DOWN key pressed.");
 
 		// Check if the racket is within screen bounds
-		if ( racket.getY() - yScreenMargin > 0) {
+		if (racket.getY() - yScreenMargin > 0) {
 			racket.translate(0, -movementSpeed * Gdx.graphics.getDeltaTime());
 		}
 	}
 
-
-	// Useful functions
 
 	// Returns this racket's sprite object
 	public Sprite getSprite() {

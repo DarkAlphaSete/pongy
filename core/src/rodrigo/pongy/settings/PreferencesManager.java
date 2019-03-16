@@ -1,13 +1,15 @@
 package rodrigo.pongy.settings;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import rodrigo.pongy.object.Racket;
 
-// Settings naming pattern
-// setting-action
 
-// I think hardcoding stuff would be inevitable for this subject
+// Settings naming pattern
+// "setting"-"action"
+
+// Maybe hardcoding a bit is inevitable sometimes?
 
 public class PreferencesManager {
 
@@ -98,5 +100,41 @@ public class PreferencesManager {
 
 		// I don't think this statement is even reachable...
 		return -1;
+	}
+
+
+	// The the controls to the defaults below, if either resetToDefaults is true or they weren't set yet
+	// (format: MOVE_UP / MOVE_DOWN):
+	// W / S for the left racket
+	// UpArrow / DownArrow for the right racket
+	public void setUpDefaultControls(boolean resetToDefaults) {
+
+		// Left racket
+		if (getRacketControl(Racket.POSITIONS.LEFT, Racket.ACTIONS.MOVE_UP) == -1 || resetToDefaults) {
+
+			setRacketControl(
+					Racket.POSITIONS.LEFT, Racket.ACTIONS.MOVE_UP,
+					Input.Keys.W);
+		}
+		if (getRacketControl(Racket.POSITIONS.LEFT, Racket.ACTIONS.MOVE_DOWN) == -1 || resetToDefaults) {
+
+			setRacketControl(
+					Racket.POSITIONS.LEFT, Racket.ACTIONS.MOVE_DOWN,
+					Input.Keys.S);
+		}
+
+		// Right racket
+		if (getRacketControl(Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_UP) == -1 || resetToDefaults) {
+
+			setRacketControl(
+					Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_UP,
+					Input.Keys.UP);
+		}
+		if (getRacketControl(Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_DOWN) == -1 || resetToDefaults) {
+
+			setRacketControl(
+					Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_DOWN,
+					Input.Keys.DOWN);
+		}
 	}
 }
