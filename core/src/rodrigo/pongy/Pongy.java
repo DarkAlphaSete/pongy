@@ -2,6 +2,7 @@ package rodrigo.pongy;
 
 import com.badlogic.gdx.Game;
 import rodrigo.pongy.screen.GameScreen;
+import rodrigo.pongy.screen.MainMenu;
 
 
 public class Pongy extends Game {
@@ -9,7 +10,7 @@ public class Pongy extends Game {
 
 	@Override
 	public void create() {
-		this.setScreen(new GameScreen(true));
+		this.setScreen(new MainMenu(this));
 	}
 
 	@Override

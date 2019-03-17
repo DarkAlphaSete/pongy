@@ -177,7 +177,7 @@ public class GameScreen implements Screen {
 
 
 	// Clears the screen
-	// Moved from the render() function to look a bit cleaner
+	// Moved from the default render() function to look a bit cleaner
 	private void clearScreen() {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
