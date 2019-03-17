@@ -57,16 +57,21 @@ public class RacketInputProcessor {
 
 	public void checkTouchInput() {
 
-		if (Gdx.input.isTouched()) {
+		for(int i = 0; i < 20; i++) {
+			if(Gdx.input.isTouched(i)) {
+				touchMove(Gdx.input.getY(i),Gdx.input.getX(i));
+			}
+		}
+	}
 
-			// = Left side of the screen
-			if (Gdx.input.getX() < Gdx.graphics.getWidth() / 2) {
-				leftRacket.draggedMove(Gdx.input.getY());
-			}
-			// = Right side of the screen
-			else {
-				rightRacket.draggedMove(Gdx.input.getY());
-			}
+	private void touchMove(float screenYCoord, float screenXCoord) {
+		// = Left side of the screen
+		if (screenXCoord < Gdx.graphics.getWidth() / 2) {
+			leftRacket.draggedMove(screenYCoord);
+		}
+		// = Right side of the screen
+		else {
+			rightRacket.draggedMove(screenYCoord);
 		}
 	}
 

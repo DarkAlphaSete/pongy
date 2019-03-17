@@ -56,15 +56,12 @@ public class Ball implements ResetListener {
 
 	private void checkCollisions() {
 
-		// Thanks StackExchange user Ricket!
-		final float MAX_BOUNCE_ANGLE = 75;
-
 		// Left collisions: goal
-		if (ball.getX() <= 0) {
+		if (ball.getX() <= 0 + leftRacket.getSprite().getWidth() / 2) {
 			scoreManager.score(Racket.POSITIONS.LEFT);
 		}
 		// Right collisions: goal
-		if (ball.getX() >= Gdx.graphics.getWidth()) {
+		if (ball.getX() >= Gdx.graphics.getWidth() - rightRacket.getSprite().getWidth() / 2) {
 			scoreManager.score(Racket.POSITIONS.RIGHT);
 		}
 

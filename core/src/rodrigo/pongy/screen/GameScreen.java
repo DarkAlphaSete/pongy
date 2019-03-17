@@ -161,7 +161,7 @@ public class GameScreen implements Screen {
 
 		ball = new Ball(
 				new Texture("objects/ball.png"),
-				150f,
+				(float) Gdx.graphics.getWidth() * Gdx.graphics.getHeight() / 2000f,
 				ballScale,
 				new Vector2(
 						Gdx.graphics.getWidth() / 2f,

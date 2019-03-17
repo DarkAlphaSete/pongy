@@ -62,19 +62,19 @@ public class Racket implements ResetListener {
 		}
 	}
 
-	public void draggedMove(int screenNewY) {
+	public void draggedMove(float screenNewY) {
 		// screenNewY is the new Y position for the racket, in screen coordinates
 
 		// Extra checks are made to make sure the player drags the racket around instead of "teleporting" it
 		// to wherever he wants / finds useful (like where the ball is)
 
 		Vector3 newPosition = camera.unproject(new Vector3(
-				racket.getX(),
+				0,
 				screenNewY,
 				0
 		));
 
-		racket.setPosition(newPosition.x, newPosition.y);
+		racket.setPosition(racket.getX(), newPosition.y + racket.getHeight() * 1.25f);
 
 	}
 
