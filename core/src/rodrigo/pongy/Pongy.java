@@ -1,7 +1,7 @@
 package rodrigo.pongy;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
+import rodrigo.pongy.screen.GameScreen;
 
 
 public class Pongy extends Game {

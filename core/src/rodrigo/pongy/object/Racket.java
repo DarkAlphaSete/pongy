@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector3;
+import rodrigo.pongy.listener.ResetListener;
 
 
-public class Racket {
+public class Racket implements ResetListener {
 
 
 	public enum ACTIONS {
@@ -22,31 +24,22 @@ public class Racket {
 	private float movementSpeed;
 	private float yScreenMargin;
 
+	private POSITIONS currentPosition;
 
-	public Racket(Texture texture, POSITIONS position, float scaleFactor, float yScreenMargin) {
+	private OrthographicCamera camera;
+
+	public Racket(Texture texture, POSITIONS position, float scaleFactor, float yScreenMargin, OrthographicCamera camera) {
+		this.camera = camera;
+
 		racket = new Sprite(texture);
 		racket.setSize(racket.getWidth() * scaleFactor, racket.getHeight() * scaleFactor);
 
+		currentPosition = position;
 
 		//movementSpeed = 150f;
 		movementSpeed = Gdx.graphics.getWidth() * Gdx.graphics.getHeight() / 550f;
 		this.yScreenMargin = yScreenMargin;
 
-		switch (position) {
-
-			case LEFT:
-				racket.setPosition(racket.getWidth() / 4, Gdx.graphics.getHeight() / 2f - racket.getHeight() / 2);
-				break;
-
-			case RIGHT:
-				racket.setPosition(Gdx.graphics.getWidth() - racket.getWidth() - racket.getWidth() / 4, Gdx.graphics.getHeight() / 2f - racket.getHeight() / 2);
-				break;
-
-			default:
-				Gdx.app.error(this.hashCode() + "", "Invalid racket position.");
-				Gdx.app.exit();
-				break;
-		}
 
 	}
 
@@ -75,8 +68,38 @@ public class Racket {
 		// Extra checks are made to make sure the player drags the racket around instead of "teleporting" it
 		// to wherever he wants / finds useful (like where the ball is)
 
-		racket.setPosition(racket.getX(), screenNewY);
+		Vector3 newPosition = camera.unproject(new Vector3(
+				racket.getX(),
+				screenNewY,
+				0
+		));
 
+		racket.setPosition(newPosition.x, newPosition.y);
+
+	}
+
+	// Reset the rackets
+	@Override
+	public void resetGame() {
+		resetRackets();
+	}
+
+	private void resetRackets() {
+		switch (currentPosition) {
+
+			case LEFT:
+				racket.setPosition(racket.getWidth() / 4, Gdx.graphics.getHeight() / 2f - racket.getHeight() / 2);
+				break;
+
+			case RIGHT:
+				racket.setPosition(Gdx.graphics.getWidth() - racket.getWidth() - racket.getWidth() / 4, Gdx.graphics.getHeight() / 2f - racket.getHeight() / 2);
+				break;
+
+			default:
+				Gdx.app.error("Racket " + hashCode(), "Invalid racket position");
+				Gdx.app.exit();
+				break;
+		}
 	}
 
 
