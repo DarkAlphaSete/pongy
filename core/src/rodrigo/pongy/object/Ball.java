@@ -21,6 +21,8 @@ public class Ball implements ResetListener {
 	private Racket leftRacket;
 	private Racket rightRacket;
 
+	private float bounceCount;
+
 
 	// Note: the direction the ball goes to after spawning will be random
 	// leftRacketRightEdge: left racket's right edge, used to calculate the collisions.
@@ -38,6 +40,8 @@ public class Ball implements ResetListener {
 		this.leftRacket = leftRacket;
 		this.rightRacket = rightRacket;
 
+		bounceCount = 0;
+
 	}
 
 	@Override
@@ -52,6 +56,8 @@ public class Ball implements ResetListener {
 
 		ball.setPosition(playAreaCenter.x - ball.getWidth() / 2, playAreaCenter.y + ball.getHeight() / 2);
 		velocity = new Vector2(xVel, yVel).scl(initialSpeed);
+
+		bounceCount /= 2;
 	}
 
 	private void checkCollisions() {
@@ -66,7 +72,7 @@ public class Ball implements ResetListener {
 		}
 
 		// Left collisions: racket
-		if (ball.getX() <= leftRacket.getSprite().getX() + leftRacket.getSprite().getWidth()) {
+		if (ball.getX() < leftRacket.getSprite().getX() + leftRacket.getSprite().getWidth()) {
 			// Check if it's within the racket's coordinates
 			if (ball.getY() >= leftRacket.getSprite().getY() && ball.getY() + ball.getHeight() <= leftRacket.getSprite().getY() + leftRacket.getSprite().getHeight()) {
 				float alpha = leftRacket.getSprite().getY() + leftRacket.getSprite().getHeight() / 2;
@@ -77,12 +83,13 @@ public class Ball implements ResetListener {
 					alpha = alpha + ball.getY() / 2;
 				}
 
-				velocity.x = velocity.x * -1 + MathUtils.clamp(alpha, -2, 2);
-				velocity.y += MathUtils.clamp(alpha, -10, 10);
+				velocity.x = velocity.x * -1 + MathUtils.clamp(alpha, -bounceCount / 2, bounceCount / 2);
+				velocity.y += MathUtils.clamp(alpha, -bounceCount, bounceCount);
+				bounceCount++;
 			}
 		}
 		// Right collisions: racket
-		if (ball.getX() + ball.getWidth() >= Gdx.graphics.getWidth() - rightRacket.getSprite().getWidth()) {
+		if (ball.getX() + ball.getWidth() > Gdx.graphics.getWidth() - rightRacket.getSprite().getWidth()) {
 			// Check if it's within the racket's coordinates
 			if (ball.getY() >= rightRacket.getSprite().getY() && ball.getY() + ball.getHeight() <= rightRacket.getSprite().getY() + rightRacket.getSprite().getHeight()) {
 				float alpha = rightRacket.getSprite().getY() + rightRacket.getSprite().getHeight() / 2;
@@ -93,8 +100,9 @@ public class Ball implements ResetListener {
 					alpha = alpha + ball.getY() / 2;
 				}
 
-				velocity.x = velocity.x * -1 + MathUtils.clamp(alpha, -2, 2);
-				velocity.y += MathUtils.clamp(alpha, -10, 10);
+				velocity.x = velocity.x * -1 + MathUtils.clamp(alpha, -bounceCount / 2, bounceCount / 2);
+				velocity.y += MathUtils.clamp(alpha, -bounceCount, bounceCount);
+				bounceCount++;
 			}
 		}
 
