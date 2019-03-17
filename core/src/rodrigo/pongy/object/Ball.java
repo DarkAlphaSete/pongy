@@ -22,6 +22,8 @@ public class Ball implements ResetListener {
 	private Racket rightRacket;
 
 	private float bounceCount;
+	private boolean hasBouncedOnSide;
+	private boolean hasBouncedOnTopBottom;
 
 
 	// Note: the direction the ball goes to after spawning will be random
@@ -41,6 +43,7 @@ public class Ball implements ResetListener {
 		this.rightRacket = rightRacket;
 
 		bounceCount = 0;
+		hasBouncedOnSide = false;
 
 	}
 
@@ -57,24 +60,26 @@ public class Ball implements ResetListener {
 		ball.setPosition(playAreaCenter.x - ball.getWidth() / 2, playAreaCenter.y + ball.getHeight() / 2);
 		velocity = new Vector2(xVel, yVel).scl(initialSpeed);
 
-		bounceCount /= 2;
+		//bounceCount /= 2;
 	}
 
 	private void checkCollisions() {
 
+		float scaleLimit = 500f * bounceCount;
+
 		// Left collisions: goal
-		if (ball.getX() <= 0 + leftRacket.getSprite().getWidth() / 2) {
+		if (ball.getX() <= 0 + leftRacket.getSprite().getWidth() / 2 && !hasBouncedOnSide) {
 			scoreManager.score(Racket.POSITIONS.LEFT);
 		}
 		// Right collisions: goal
-		if (ball.getX() >= Gdx.graphics.getWidth() - rightRacket.getSprite().getWidth() / 2) {
+		else if (ball.getX() >= rightRacket.getSprite().getX() + rightRacket.getSprite().getWidth() / 2 && !hasBouncedOnSide) {
 			scoreManager.score(Racket.POSITIONS.RIGHT);
 		}
 
 		// Left collisions: racket
-		if (ball.getX() < leftRacket.getSprite().getX() + leftRacket.getSprite().getWidth()) {
+		else if (ball.getX() < leftRacket.getSprite().getX() + leftRacket.getSprite().getWidth() && !hasBouncedOnSide) {
 			// Check if it's within the racket's coordinates
-			if (ball.getY() >= leftRacket.getSprite().getY() && ball.getY() + ball.getHeight() <= leftRacket.getSprite().getY() + leftRacket.getSprite().getHeight()) {
+			if (ball.getY() > leftRacket.getSprite().getY() && ball.getY() + ball.getHeight() < leftRacket.getSprite().getY() + leftRacket.getSprite().getHeight()) {
 				float alpha = leftRacket.getSprite().getY() + leftRacket.getSprite().getHeight() / 2;
 
 				if (ball.getY() + ball.getHeight() > alpha) {
@@ -83,15 +88,17 @@ public class Ball implements ResetListener {
 					alpha = alpha + ball.getY() / 2;
 				}
 
-				velocity.x = velocity.x * -1 + MathUtils.clamp(alpha, -bounceCount / 2, bounceCount / 2);
-				velocity.y += MathUtils.clamp(alpha, -bounceCount, bounceCount);
+				velocity.x = velocity.x + -alpha;
+				velocity.y += alpha;
+
+				hasBouncedOnSide = true;
 				bounceCount++;
 			}
 		}
 		// Right collisions: racket
-		if (ball.getX() + ball.getWidth() > Gdx.graphics.getWidth() - rightRacket.getSprite().getWidth()) {
+		else if (ball.getX() + ball.getWidth() > rightRacket.getSprite().getX() && !hasBouncedOnSide) {
 			// Check if it's within the racket's coordinates
-			if (ball.getY() >= rightRacket.getSprite().getY() && ball.getY() + ball.getHeight() <= rightRacket.getSprite().getY() + rightRacket.getSprite().getHeight()) {
+			if (ball.getY() > rightRacket.getSprite().getY() && ball.getY() + ball.getHeight() < rightRacket.getSprite().getY() + rightRacket.getSprite().getHeight()) {
 				float alpha = rightRacket.getSprite().getY() + rightRacket.getSprite().getHeight() / 2;
 
 				if (ball.getY() + ball.getHeight() > alpha) {
@@ -100,21 +107,33 @@ public class Ball implements ResetListener {
 					alpha = alpha + ball.getY() / 2;
 				}
 
-				velocity.x = velocity.x * -1 + MathUtils.clamp(alpha, -bounceCount / 2, bounceCount / 2);
-				velocity.y += MathUtils.clamp(alpha, -bounceCount, bounceCount);
+				velocity.x = velocity.x + -alpha;
+				velocity.y += alpha;
+
+				hasBouncedOnSide = true;
 				bounceCount++;
 			}
 		}
 
 		// Bottom collisions
-		if (ball.getY() <= 0) {
+		else if (ball.getY() <= 0 && !hasBouncedOnTopBottom) {
 			velocity.y *= -1;
+			hasBouncedOnTopBottom = true;
 		}
 		// Top collisions
-		if (ball.getY() >= Gdx.graphics.getHeight() - ball.getHeight()) {
+		else if (ball.getY() >= Gdx.graphics.getHeight() - ball.getHeight() && !hasBouncedOnTopBottom) {
 			velocity.y *= -1;
+			hasBouncedOnTopBottom = true;
 		}
 
+		// Check if ball the as passed the middle of the screen, X
+		else if (ball.getX() > Gdx.graphics.getWidth() / 2 - ball.getWidth() && ball.getX() < Gdx.graphics.getWidth() / 2 + ball.getWidth()) {
+			hasBouncedOnSide = false;
+		}
+		// Check if the ball has passed the middle of the screen, Y
+		else if (ball.getY() > Gdx.graphics.getHeight() / 2 - ball.getHeight() && ball.getY() < Gdx.graphics.getHeight() / 2 + ball.getHeight()) {
+			hasBouncedOnTopBottom = false;
+		}
 
 	}
 
