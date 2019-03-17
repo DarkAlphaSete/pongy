@@ -65,7 +65,7 @@ public class Ball implements ResetListener {
 
 	private void checkCollisions() {
 
-		float scaleLimit = 100f * bounceCount * bounceCount;
+		final float MAX_BOUNCE_ANGLE = 75;
 
 
 		// Bottom collisions
@@ -103,16 +103,7 @@ public class Ball implements ResetListener {
 			if (ball.getY() > leftRacket.getSprite().getY() && ball.getY() + ball.getHeight() < leftRacket.getSprite().getY() + leftRacket.getSprite().getHeight()) {
 				bounceCount++;
 
-				float alpha = leftRacket.getSprite().getY() + leftRacket.getSprite().getHeight() / 2;
-
-				if (ball.getY() + ball.getHeight() > alpha) {
-					alpha = alpha - ball.getY() / 2;
-				} else {
-					alpha = alpha + ball.getY() / 2;
-				}
-
-				velocity.x = velocity.x * -1 * bounceCount * bounceCount;
-				velocity.y = MathUtils.clamp(alpha, -scaleLimit, scaleLimit);
+				velocity.x = (velocity.x + bounceCount) * -1.2f;
 
 				hasBouncedOnSide = true;
 			}
@@ -123,16 +114,7 @@ public class Ball implements ResetListener {
 			if (ball.getY() > rightRacket.getSprite().getY() && ball.getY() + ball.getHeight() < rightRacket.getSprite().getY() + rightRacket.getSprite().getHeight()) {
 				bounceCount++;
 
-				float alpha = rightRacket.getSprite().getY() + rightRacket.getSprite().getHeight() / 2;
-
-				if (ball.getY() + ball.getHeight() > alpha) {
-					alpha = alpha - ball.getY() / 2;
-				} else {
-					alpha = alpha + ball.getY() / 2;
-				}
-
-				velocity.x = velocity.x * -1 * bounceCount * bounceCount;
-				velocity.y = MathUtils.clamp(alpha, -scaleLimit, scaleLimit);
+				velocity.x = (velocity.x + bounceCount) * -1.2f;
 
 				hasBouncedOnSide = true;
 			}
