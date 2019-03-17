@@ -28,7 +28,10 @@ public class Racket implements ResetListener {
 
 	private OrthographicCamera camera;
 
-	public Racket(Texture texture, POSITIONS position, float scaleFactor, float yScreenMargin, OrthographicCamera camera) {
+	private boolean survivalRacket;
+
+
+	public Racket(Texture texture, POSITIONS position, float scaleFactor, float yScreenMargin, OrthographicCamera camera, boolean survivalRacket) {
 		this.camera = camera;
 
 		racket = new Sprite(texture);
@@ -36,7 +39,20 @@ public class Racket implements ResetListener {
 
 		currentPosition = position;
 
-		//movementSpeed = 150f;
+		this.survivalRacket = survivalRacket;
+
+		// If this is a survival racket, make it the size of the screen (like a wall)
+		if (this.survivalRacket) {
+			if (position == POSITIONS.RIGHT) {
+				racket.setSize(racket.getWidth(), Gdx.graphics.getHeight() * 2);
+				racket.setPosition(Gdx.graphics.getWidth() - racket.getWidth() / 2, 0);
+			} else {
+				Gdx.app.error("Racket " + hashCode(), "Survival mode is only available for the right racket.");
+				Gdx.app.exit();
+			}
+
+		}
+
 		movementSpeed = Gdx.graphics.getWidth() * Gdx.graphics.getHeight() / 550f;
 		this.yScreenMargin = yScreenMargin;
 
@@ -44,11 +60,13 @@ public class Racket implements ResetListener {
 	}
 
 
+	// Note: the survival racket can't be controlled, since it will act as a wall
+
 	// Movement key event listeners, should execute movement code when fired
 	public void moveUpPressed() {
 		//Gdx.app.log(this.hashCode() + "", "UP key pressed.");
 		// Check if the racket is within screen bounds
-		if (racket.getY() < Gdx.graphics.getHeight() - racket.getHeight() - yScreenMargin) {
+		if (!survivalRacket && racket.getY() < Gdx.graphics.getHeight() - racket.getHeight() - yScreenMargin) {
 			racket.translate(0, movementSpeed * Gdx.graphics.getDeltaTime());
 		}
 	}
@@ -57,7 +75,7 @@ public class Racket implements ResetListener {
 		//Gdx.app.log(this.hashCode() + "", "DOWN key pressed.");
 
 		// Check if the racket is within screen bounds
-		if (racket.getY() - yScreenMargin > 0) {
+		if (!survivalRacket && racket.getY() - yScreenMargin > 0) {
 			racket.translate(0, -movementSpeed * Gdx.graphics.getDeltaTime());
 		}
 	}
@@ -74,7 +92,9 @@ public class Racket implements ResetListener {
 				0
 		));
 
-		racket.setPosition(racket.getX(), newPosition.y + racket.getHeight() * 1.25f);
+		if (!survivalRacket) {
+			racket.setPosition(racket.getX(), newPosition.y + racket.getHeight() * 1.25f);
+		}
 
 	}
 
@@ -92,7 +112,9 @@ public class Racket implements ResetListener {
 				break;
 
 			case RIGHT:
-				racket.setPosition(Gdx.graphics.getWidth() - racket.getWidth() - racket.getWidth() / 4, Gdx.graphics.getHeight() / 2f - racket.getHeight() / 2);
+				if (!survivalRacket) {
+					racket.setPosition(Gdx.graphics.getWidth() - racket.getWidth() - racket.getWidth() / 4, Gdx.graphics.getHeight() / 2f - racket.getHeight() / 2);
+				}
 				break;
 
 			default:

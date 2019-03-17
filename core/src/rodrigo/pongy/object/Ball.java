@@ -103,7 +103,7 @@ public class Ball implements ResetListener {
 			if (ball.getY() > leftRacket.getSprite().getY() && ball.getY() + ball.getHeight() < leftRacket.getSprite().getY() + leftRacket.getSprite().getHeight()) {
 				bounceCount++;
 
-				velocity.x = (velocity.x + bounceCount) * -1.2f;
+				velocity.x = (velocity.x + bounceCount / 2) * -1.1f;
 
 				hasBouncedOnSide = true;
 			}
@@ -114,7 +114,7 @@ public class Ball implements ResetListener {
 			if (ball.getY() > rightRacket.getSprite().getY() && ball.getY() + ball.getHeight() < rightRacket.getSprite().getY() + rightRacket.getSprite().getHeight()) {
 				bounceCount++;
 
-				velocity.x = (velocity.x + bounceCount) * -1.2f;
+				velocity.x = (velocity.x + bounceCount / 2) * -1.1f;
 
 				hasBouncedOnSide = true;
 			}
@@ -128,6 +128,9 @@ public class Ball implements ResetListener {
 		ball.translate(
 				velocity.x * Gdx.graphics.getDeltaTime(),
 				velocity.y * Gdx.graphics.getDeltaTime());
+		checkCollisions();
+		// I doubt the double check is necessary, but really, sometimes the ball moves so quickly she goes past the
+		// triggers before they're even checked...
 	}
 
 

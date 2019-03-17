@@ -18,9 +18,13 @@ public class ScoreManager {
 
 	private Array<ResetListener> resetListeners;
 
-	public ScoreManager(BitmapFont font, Ball ball, Array<ResetListener> resetListeners) {
+	private boolean survivalMode;
+
+	public ScoreManager(BitmapFont font, Ball ball, Array<ResetListener> resetListeners, boolean survivalMode) {
 		this.font = font;
 		this.ball = ball;
+
+		this.survivalMode = survivalMode;
 
 		font.getData().setScale((float) Gdx.graphics.getWidth() / Gdx.graphics.getHeight());
 
@@ -50,7 +54,10 @@ public class ScoreManager {
 	}
 
 	public void drawText(SpriteBatch batch) {
-		font.draw(batch, "" + leftScore, ball.getSprite().getWidth() * 3, Gdx.graphics.getHeight() - ball.getSprite().getHeight());
+		// If the survival mode is enabled, don't show the left player it's score, because there won't be any.
+		if (!survivalMode) {
+			font.draw(batch, "" + leftScore, ball.getSprite().getWidth() * 3, Gdx.graphics.getHeight() - ball.getSprite().getHeight());
+		}
 		font.draw(batch, "" + rightScore, Gdx.graphics.getWidth() - ball.getSprite().getWidth() * 4, Gdx.graphics.getHeight() - ball.getSprite().getHeight());
 	}
 

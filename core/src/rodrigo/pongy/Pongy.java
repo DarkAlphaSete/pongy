@@ -9,7 +9,7 @@ public class Pongy extends Game {
 
 	@Override
 	public void create() {
-		this.setScreen(new GameScreen());
+		this.setScreen(new GameScreen(true));
 	}
 
 	@Override

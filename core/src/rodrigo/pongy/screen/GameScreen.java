@@ -42,13 +42,17 @@ public class GameScreen implements Screen {
 
 	private OrthographicCamera camera;
 
+	private boolean survivalMode;
 
-	public GameScreen() {
+
+	public GameScreen(boolean survivalMode) {
 		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 		racketsScale = Gdx.graphics.getWidth() / 200f;
 		racketsYMargin = Gdx.graphics.getHeight() / 30f;
 		ballScale = Gdx.graphics.getHeight() / 30f;
+
+		this.survivalMode = survivalMode;
 
 		batch = new SpriteBatch();
 		preferencesManager = new PreferencesManager("Pongy");
@@ -63,11 +67,11 @@ public class GameScreen implements Screen {
 		resetListeners.add(rightRacket);
 		resetListeners.add(ball);
 
-		scoreManager = new ScoreManager(new BitmapFont(), ball, resetListeners);
+		scoreManager = new ScoreManager(new BitmapFont(), ball, resetListeners, survivalMode);
 
 		ball.scoreManager = scoreManager;
 
-		racketInputProcessor = new RacketInputProcessor(leftRacket, rightRacket, preferencesManager);
+		racketInputProcessor = new RacketInputProcessor(leftRacket, rightRacket, preferencesManager, survivalMode);
 
 		for(ResetListener listener: resetListeners) {
 			listener.resetGame();
@@ -151,13 +155,15 @@ public class GameScreen implements Screen {
 				Racket.POSITIONS.LEFT,
 				racketsScale,
 				racketsYMargin,
-				camera);
+				camera,
+				false);
 		rightRacket = new Racket(
 				new Texture("objects/racket.png"),
 				Racket.POSITIONS.RIGHT,
 				racketsScale,
 				racketsYMargin,
-				camera);
+				camera,
+				survivalMode);
 
 		ball = new Ball(
 				new Texture("objects/ball.png"),
