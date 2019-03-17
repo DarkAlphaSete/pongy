@@ -1,16 +1,14 @@
 package rodrigo.pongy;
 
 import com.badlogic.gdx.Game;
-import rodrigo.pongy.screen.GameScreen;
-import rodrigo.pongy.screen.MainMenu;
+import rodrigo.pongy.screen.MainMenuScreen;
 
 
 public class Pongy extends Game {
 
-
 	@Override
 	public void create() {
-		this.setScreen(new MainMenu(this));
+		this.setScreen(new MainMenuScreen(this));
 	}
 
 	@Override

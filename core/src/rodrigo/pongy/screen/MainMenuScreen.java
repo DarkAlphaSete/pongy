@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class MainMenu implements Screen {
+public class MainMenuScreen implements Screen {
 
 	private Game game;
 
@@ -26,7 +26,7 @@ public class MainMenu implements Screen {
 	private GlyphLayout twoPlayerModeText;
 
 
-	public MainMenu(Game game) {
+	public MainMenuScreen(Game game) {
 		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch = new SpriteBatch();
 		font = new BitmapFont();
@@ -34,6 +34,8 @@ public class MainMenu implements Screen {
 		gameTitle = new GlyphLayout(font, "Pongy");
 		survivalModeText = new GlyphLayout(font, "1 x 0");
 		twoPlayerModeText = new GlyphLayout(font, "1 x 1");
+
+		font.getData().setScale(1.1f);
 
 		this.game = game;
 
@@ -64,13 +66,13 @@ public class MainMenu implements Screen {
 
 			// Right side
 			if(Gdx.input.getX() > camera.viewportWidth / 2) {
-				gameScreen = new GameScreen(false);
+				gameScreen = new GameScreen(false, game);
 				game.setScreen(gameScreen);
 
 			}
 			// Left side of the screen
 			else {
-				gameScreen = new GameScreen(true);
+				gameScreen = new GameScreen(true, game);
 				game.setScreen(gameScreen);
 			}
 		}
@@ -101,6 +103,7 @@ public class MainMenu implements Screen {
 	public void dispose() {
 		batch.dispose();
 		font.dispose();
+		gameScreen.dispose();
 	}
 
 	// Clears the screen

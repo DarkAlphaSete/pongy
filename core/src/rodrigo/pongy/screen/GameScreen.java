@@ -1,5 +1,6 @@
 package rodrigo.pongy.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import rodrigo.pongy.input.GameScreenInputProcessor;
 import rodrigo.pongy.input.RacketInputProcessor;
 import rodrigo.pongy.listener.ResetListener;
 import rodrigo.pongy.manager.ScoreManager;
@@ -25,6 +27,8 @@ public class GameScreen implements Screen {
 	private RacketInputProcessor racketInputProcessor;
 
 	private PreferencesManager preferencesManager;
+
+	private GameScreenInputProcessor gameScreenInputProcessor;
 
 	private ScoreManager scoreManager;
 
@@ -45,8 +49,12 @@ public class GameScreen implements Screen {
 	private boolean survivalMode;
 
 
-	public GameScreen(boolean survivalMode) {
+	public GameScreen(boolean survivalMode, Game game) {
 		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+		gameScreenInputProcessor = new GameScreenInputProcessor(game);
+
+		Gdx.input.setInputProcessor(gameScreenInputProcessor);
 
 		racketsScale = Gdx.graphics.getWidth() / 200f;
 		racketsYMargin = Gdx.graphics.getHeight() / 30f;
