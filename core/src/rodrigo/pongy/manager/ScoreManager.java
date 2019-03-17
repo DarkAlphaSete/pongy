@@ -22,6 +22,8 @@ public class ScoreManager {
 		this.font = font;
 		this.ball = ball;
 
+		font.getData().setScale((float) Gdx.graphics.getWidth() / Gdx.graphics.getHeight());
+
 		leftScore = 0;
 		rightScore = 0;
 
