@@ -158,16 +158,35 @@ public class Ball implements ResetListener {
 
 	public void update() {
 
+		checkCollisions();
+
 		// Workaround to too-fast balls: translate n% n times and check between each translation
 		// No human player is going to last until this system breaks... hopefully...
-		int steps = 10;
+		int steps = 50;
+		float factor = 1f / steps;
+		Vector2 newVel = new Vector2(velocity.x * factor, velocity.y * factor);
 		for (int i = 0; i < steps; i++) {
-			float factor = (float) i / steps;
-			ball.translate(
-					velocity.x * Gdx.graphics.getDeltaTime() * factor * factor,
-					velocity.y * Gdx.graphics.getDeltaTime() * factor * factor);
-			checkCollisions();
+
+			if(i + 1 == steps) {
+				ball.translate(
+						newVel.x * factor * Gdx.graphics.getDeltaTime(),
+						newVel.y * factor * Gdx.graphics.getDeltaTime());
+				checkCollisions();
+			} else {
+				ball.translate(
+						newVel.x * factor,
+						newVel.y * factor);
+				checkCollisions();
+			}
+
 		}
+
+		// Now, add the delta time
+/*
+		ball.translate(
+				Gdx.graphics.getDeltaTime() * factor,
+				Gdx.graphics.getDeltaTime() * factor);
+		checkCollisions();*/
 
 	}
 
