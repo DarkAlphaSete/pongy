@@ -127,7 +127,7 @@ public class GameScreen implements Screen {
 
 		// dirty thingy for debug purposes
 		if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-			ball.reset();
+			ball.reset(true);
 		}
 
 	}
@@ -194,7 +194,8 @@ public class GameScreen implements Screen {
 						Gdx.graphics.getWidth() / 2f,
 						Gdx.graphics.getHeight() / 2f),
 				leftRacket, rightRacket,
-				singlePlayerMode);
+				singlePlayerMode,
+				camera);
 
 		floorLine = new FloorDecor(new Texture("objects/ball.png"), true);
 		ceilingLine = new FloorDecor(new Texture("objects/ball.png"), false);

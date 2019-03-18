@@ -3,6 +3,7 @@ package rodrigo.pongy.object;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -34,23 +35,28 @@ public class Ball implements ResetListener {
 	// I have no idea how to credit the sound
 	private Sound bounceSFX;
 
+	// Workaround to the glitch where the ball goes through the hitboxes before it being checked
+	private OrthographicCamera camera;
+
 
 	// Note: the direction the ball goes to after spawning will be random
 	// leftRacketRightEdge: left racket's right edge, used to calculate the collisions.
 	// Also used on the right racket's collision calculations, which means if they aren't symmetrical, everything screws
 	// up.
-	public Ball(Texture texture, float initialSpeed, float scaleFactor, Vector2 playAreaCenter, Racket leftRacket, Racket rightRacket, boolean singlePlayerMode) {
+	public Ball(Texture texture, float initialSpeed, float scaleFactor, Vector2 playAreaCenter, Racket leftRacket, Racket rightRacket, boolean singlePlayerMode, OrthographicCamera orthographicCamera) {
 		this.playAreaCenter = playAreaCenter;
 		this.initialSpeed = initialSpeed;
 
 		this.singlePlayerMode = singlePlayerMode;
+
+		camera = orthographicCamera;
 
 		ball = new Sprite(texture);
 		ball.setSize(ball.getWidth() * scaleFactor, ball.getHeight() * scaleFactor);
 
 		bounceSFX = Gdx.audio.newSound(Gdx.files.internal("sound/bounce.wav"));
 
-		reset();
+		reset(true);
 
 		this.leftRacket = leftRacket;
 		this.rightRacket = rightRacket;
@@ -62,10 +68,10 @@ public class Ball implements ResetListener {
 
 	@Override
 	public void resetGame() {
-		reset();
+		reset(true);
 	}
 
-	public void reset() {
+	public void reset(boolean resetVelocity) {
 		// Only -1 and 1 are needed, so a random boolean should do the trick
 		int xVel = MathUtils.randomSign();
 		int yVel = MathUtils.randomSign();
@@ -77,12 +83,23 @@ public class Ball implements ResetListener {
 		}
 
 		ball.setPosition(playAreaCenter.x - ball.getWidth() / 2, playAreaCenter.y + ball.getHeight() / 2);
-		velocity = new Vector2(xVel, yVel).scl(initialSpeed);
+
+		if(resetVelocity) {
+			velocity = new Vector2(xVel, yVel).scl(initialSpeed);
+		} else {
+			// If the velocity isn't going to get reset, it means it was called by the camera workaround, so make it
+			// go right to make sure the player has time to react...
+			velocity = new Vector2(Math.abs(velocity.x), velocity.y);
+		}
 
 		//bounceCount /= 2;
 	}
 
 	private void checkCollisions() {
+
+		if(camera.frustum.pointInFrustum(ball.getX(), ball.getY(), 0)) {
+			reset(false);
+		}
 
 
 		// Bottom collisions
@@ -149,13 +166,12 @@ public class Ball implements ResetListener {
 	}
 
 	public void update() {
+
 		checkCollisions();
 		ball.translate(
 				velocity.x * Gdx.graphics.getDeltaTime(),
 				velocity.y * Gdx.graphics.getDeltaTime());
-		checkCollisions();
-		// I doubt the double check is necessary, but really, sometimes the ball moves so quickly she goes past the
-		// triggers before they're even checked...
+
 	}
 
 
