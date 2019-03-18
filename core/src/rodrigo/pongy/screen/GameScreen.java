@@ -16,6 +16,7 @@ import rodrigo.pongy.input.RacketInputProcessor;
 import rodrigo.pongy.listener.ResetListener;
 import rodrigo.pongy.manager.ScoreManager;
 import rodrigo.pongy.object.Ball;
+import rodrigo.pongy.object.FloorDecor;
 import rodrigo.pongy.object.Racket;
 import rodrigo.pongy.settings.PreferencesManager;
 
@@ -47,6 +48,10 @@ public class GameScreen implements Screen {
 	private OrthographicCamera camera;
 
 	private boolean singlePlayerMode;
+
+	private FloorDecor floorLine;
+	private FloorDecor ceilingLine;
+
 
 
 	public GameScreen(boolean singlePlayerMode, Game game) {
@@ -111,6 +116,10 @@ public class GameScreen implements Screen {
 
 		ball.getSprite().draw(batch);
 
+		floorLine.getSprite().draw(batch);
+		ceilingLine.getSprite().draw(batch);
+
+
 		scoreManager.drawText(batch);
 
 		batch.end();
@@ -149,6 +158,9 @@ public class GameScreen implements Screen {
 		leftRacket.dispose();
 		rightRacket.dispose();
 
+		floorLine.dispose();
+		ceilingLine.dispose();
+
 		ball.dispose();
 
 		scoreManager.dispose();
@@ -181,6 +193,10 @@ public class GameScreen implements Screen {
 						Gdx.graphics.getWidth() / 2f,
 						Gdx.graphics.getHeight() / 2f),
 				leftRacket, rightRacket);
+
+		floorLine = new FloorDecor(new Texture("objects/ball.png"), true);
+		ceilingLine = new FloorDecor(new Texture("objects/ball.png"), false);
+
 	}
 
 
