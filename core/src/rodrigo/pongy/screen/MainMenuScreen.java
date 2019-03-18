@@ -22,7 +22,7 @@ public class MainMenuScreen implements Screen {
 	private SpriteBatch batch;
 
 	private GlyphLayout gameTitle;
-	private GlyphLayout survivalModeText;
+	private GlyphLayout singlePlayerModeText;
 	private GlyphLayout twoPlayerModeText;
 
 
@@ -32,7 +32,7 @@ public class MainMenuScreen implements Screen {
 		font = new BitmapFont();
 
 		gameTitle = new GlyphLayout(font, "Pongy");
-		survivalModeText = new GlyphLayout(font, "1 x 0");
+		singlePlayerModeText = new GlyphLayout(font, "1 x 0");
 		twoPlayerModeText = new GlyphLayout(font, "1 x 1");
 
 		font.getData().setScale(1.1f);
@@ -57,7 +57,7 @@ public class MainMenuScreen implements Screen {
 		//Left: survival mode
 		font.draw(batch, twoPlayerModeText, camera.viewportWidth * 0.75f, camera.viewportHeight / 2);
 		// Right: player vs player
-		font.draw(batch, survivalModeText, camera.viewportWidth / 4, camera.viewportHeight / 2);
+		font.draw(batch, singlePlayerModeText, camera.viewportWidth / 4, camera.viewportHeight / 2);
 		batch.end();
 
 		// Check for touches to select the mode

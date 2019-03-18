@@ -1,7 +1,6 @@
 package rodrigo.pongy.input;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import rodrigo.pongy.object.Racket;
 import rodrigo.pongy.settings.PreferencesManager;
 
@@ -13,16 +12,16 @@ public class RacketInputProcessor {
 	private Racket leftRacket;
 	private Racket rightRacket;
 
-	private boolean survivalMode;
+	private boolean singlePlayerMode;
 
 
-	public RacketInputProcessor(Racket leftRacket, Racket rightRacket, PreferencesManager preferencesManager, boolean survivalMode) {
+	public RacketInputProcessor(Racket leftRacket, Racket rightRacket, PreferencesManager preferencesManager, boolean singlePlayerMode) {
 		this.preferencesManager = preferencesManager;
 
 		this.leftRacket = leftRacket;
 		this.rightRacket = rightRacket;
 
-		this.survivalMode = survivalMode;
+		this.singlePlayerMode = singlePlayerMode;
 
 	}
 
@@ -45,7 +44,7 @@ public class RacketInputProcessor {
 		// Right racket
 		// Unnecessary check, because the racket itself has disabled movement if it's a survival racket, but maybe
 		// this saves some resources...
-		if(!survivalMode) {
+		if(!singlePlayerMode) {
 			if (Gdx.input.isKeyPressed(
 					preferencesManager.getRacketControl(
 							Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_DOWN))) {
@@ -76,7 +75,7 @@ public class RacketInputProcessor {
 
 		// = Left side of the screen
 		// If survival mode is enabled, the entire screen is available to the single player.
-		if (survivalMode || screenXCoord < Gdx.graphics.getWidth() / 2) {
+		if (singlePlayerMode || screenXCoord < Gdx.graphics.getWidth() / 2) {
 			leftRacket.draggedMove(screenYCoord);
 		}
 		// = Right side of the screen

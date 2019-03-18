@@ -28,10 +28,10 @@ public class Racket implements ResetListener {
 
 	private OrthographicCamera camera;
 
-	private boolean survivalRacket;
+	private boolean singleRacket;
 
 
-	public Racket(Texture texture, POSITIONS position, float scaleFactor, float yScreenMargin, OrthographicCamera camera, boolean survivalRacket) {
+	public Racket(Texture texture, POSITIONS position, float scaleFactor, float yScreenMargin, OrthographicCamera camera, boolean singleRacket) {
 		this.camera = camera;
 
 		racket = new Sprite(texture);
@@ -39,10 +39,10 @@ public class Racket implements ResetListener {
 
 		currentPosition = position;
 
-		this.survivalRacket = survivalRacket;
+		this.singleRacket = singleRacket;
 
 		// If this is a survival racket, make it the size of the screen (like a wall)
-		if (this.survivalRacket) {
+		if (this.singleRacket) {
 			if (position == POSITIONS.RIGHT) {
 				racket.setSize(racket.getWidth(), Gdx.graphics.getHeight() * 2);
 				racket.setPosition(Gdx.graphics.getWidth() - racket.getWidth() / 2, 0);
@@ -66,7 +66,7 @@ public class Racket implements ResetListener {
 	public void moveUpPressed() {
 		//Gdx.app.log(this.hashCode() + "", "UP key pressed.");
 		// Check if the racket is within screen bounds
-		if (!survivalRacket && racket.getY() < Gdx.graphics.getHeight() - racket.getHeight() - yScreenMargin) {
+		if (!singleRacket && racket.getY() < Gdx.graphics.getHeight() - racket.getHeight() - yScreenMargin) {
 			racket.translate(0, movementSpeed * Gdx.graphics.getDeltaTime());
 		}
 	}
@@ -75,7 +75,7 @@ public class Racket implements ResetListener {
 		//Gdx.app.log(this.hashCode() + "", "DOWN key pressed.");
 
 		// Check if the racket is within screen bounds
-		if (!survivalRacket && racket.getY() - yScreenMargin > 0) {
+		if (!singleRacket && racket.getY() - yScreenMargin > 0) {
 			racket.translate(0, -movementSpeed * Gdx.graphics.getDeltaTime());
 		}
 	}
@@ -92,7 +92,7 @@ public class Racket implements ResetListener {
 				0
 		));
 
-		if (!survivalRacket) {
+		if (!singleRacket) {
 			racket.setPosition(racket.getX(), newPosition.y + racket.getHeight() * 1.25f);
 		}
 
@@ -112,7 +112,7 @@ public class Racket implements ResetListener {
 				break;
 
 			case RIGHT:
-				if (!survivalRacket) {
+				if (!singleRacket) {
 					racket.setPosition(Gdx.graphics.getWidth() - racket.getWidth() - racket.getWidth() / 4, Gdx.graphics.getHeight() / 2f - racket.getHeight() / 2);
 				}
 				break;
