@@ -86,14 +86,13 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void hide() {
-
+		dispose();
 	}
 
 	@Override
 	public void dispose() {
 		batch.dispose();
 		font.dispose();
-		gameScreen.dispose();
 	}
 
 	// Clears the screen
