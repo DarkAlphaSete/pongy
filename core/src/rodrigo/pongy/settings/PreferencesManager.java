@@ -136,5 +136,7 @@ public class PreferencesManager {
 					Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_DOWN,
 					Input.Keys.DOWN);
 		}
+
+		preferences.flush();
 	}
 }
