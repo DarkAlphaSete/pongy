@@ -35,21 +35,16 @@ public class Ball implements ResetListener {
 	// I have no idea how to credit the sound
 	private Sound bounceSFX;
 
-	// Workaround to the glitch where the ball goes through the hitboxes before it being checked
-	private OrthographicCamera camera;
-
 
 	// Note: the direction the ball goes to after spawning will be random
 	// leftRacketRightEdge: left racket's right edge, used to calculate the collisions.
 	// Also used on the right racket's collision calculations, which means if they aren't symmetrical, everything screws
 	// up.
-	public Ball(Texture texture, float initialSpeed, float scaleFactor, Vector2 playAreaCenter, Racket leftRacket, Racket rightRacket, boolean singlePlayerMode, OrthographicCamera orthographicCamera) {
+	public Ball(Texture texture, float initialSpeed, float scaleFactor, Vector2 playAreaCenter, Racket leftRacket, Racket rightRacket, boolean singlePlayerMode) {
 		this.playAreaCenter = playAreaCenter;
 		this.initialSpeed = initialSpeed;
 
 		this.singlePlayerMode = singlePlayerMode;
-
-		camera = orthographicCamera;
 
 		ball = new Sprite(texture);
 		ball.setSize(ball.getWidth() * scaleFactor, ball.getHeight() * scaleFactor);
@@ -78,13 +73,13 @@ public class Ball implements ResetListener {
 
 		// If it's a single player game, make the ball always start going left.
 		// This way the best time won't be affected by RNG.
-		if(singlePlayerMode) {
+		if (singlePlayerMode) {
 			xVel = -1;
 		}
 
 		ball.setPosition(playAreaCenter.x - ball.getWidth() / 2, playAreaCenter.y + ball.getHeight() / 2);
 
-		if(resetVelocity) {
+		if (resetVelocity) {
 			velocity = new Vector2(xVel, yVel).scl(initialSpeed);
 		} else {
 			// If the velocity isn't going to get reset, it means it was called by the camera workaround, so make it
@@ -96,10 +91,6 @@ public class Ball implements ResetListener {
 	}
 
 	private void checkCollisions() {
-
-		if(camera.frustum.pointInFrustum(ball.getX(), ball.getY(), 0)) {
-			reset(false);
-		}
 
 
 		// Bottom collisions
@@ -167,10 +158,16 @@ public class Ball implements ResetListener {
 
 	public void update() {
 
-		checkCollisions();
-		ball.translate(
-				velocity.x * Gdx.graphics.getDeltaTime(),
-				velocity.y * Gdx.graphics.getDeltaTime());
+		// Workaround to too-fast balls: translate n% n times and check between each translation
+		// No human player is going to last until this system breaks... hopefully...
+		int steps = 10;
+		for (int i = 0; i < steps; i++) {
+			float factor = (float) i / steps;
+			ball.translate(
+					velocity.x * Gdx.graphics.getDeltaTime() * factor * factor,
+					velocity.y * Gdx.graphics.getDeltaTime() * factor * factor);
+			checkCollisions();
+		}
 
 	}
 

@@ -194,8 +194,7 @@ public class GameScreen implements Screen {
 						Gdx.graphics.getWidth() / 2f,
 						Gdx.graphics.getHeight() / 2f),
 				leftRacket, rightRacket,
-				singlePlayerMode,
-				camera);
+				singlePlayerMode);
 
 		floorLine = new FloorDecor(new Texture("objects/ball.png"), true);
 		ceilingLine = new FloorDecor(new Texture("objects/ball.png"), false);
