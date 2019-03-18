@@ -44,7 +44,7 @@ public class RacketInputProcessor {
 		// Right racket
 		// Unnecessary check, because the racket itself has disabled movement if it's a survival racket, but maybe
 		// this saves some resources...
-		if(!singlePlayerMode) {
+		if (!singlePlayerMode) {
 			if (Gdx.input.isKeyPressed(
 					preferencesManager.getRacketControl(
 							Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_DOWN))) {
@@ -64,9 +64,9 @@ public class RacketInputProcessor {
 
 	public void checkTouchInput() {
 
-		for(int i = 0; i < 20; i++) {
-			if(Gdx.input.isTouched(i)) {
-				touchMove(Gdx.input.getY(i),Gdx.input.getX(i));
+		for (int i = 0; i < 20; i++) {
+			if (Gdx.input.isTouched(i)) {
+				touchMove(Gdx.input.getY(i), Gdx.input.getX(i));
 			}
 		}
 	}

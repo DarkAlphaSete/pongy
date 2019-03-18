@@ -3,7 +3,6 @@ package rodrigo.pongy.manager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import rodrigo.pongy.listener.ResetListener;
 import rodrigo.pongy.object.Ball;
@@ -30,8 +29,6 @@ public class ScoreManager {
 	private Array<ResetListener> resetListeners;
 
 	private boolean singlePlayerMode;
-
-
 
 
 	public ScoreManager(BitmapFont font, Ball ball, Array<ResetListener> resetListeners, boolean singlePlayerMode, PreferencesManager preferencesManager) {

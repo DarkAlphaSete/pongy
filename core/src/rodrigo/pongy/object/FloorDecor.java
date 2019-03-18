@@ -16,17 +16,16 @@ public class FloorDecor {
 	public FloorDecor(Texture texture, boolean isFloor) {
 		line = new Sprite(texture);
 
-		line.setPosition(0,0);
+		line.setPosition(0, 0);
 
 		line.setScale(Gdx.graphics.getWidth() * 2, 1);
 
-		if(!isFloor) {
+		if (!isFloor) {
 			// If it's not a floor, throw it to the ceiling!
 			line.setPosition(0, Gdx.graphics.getHeight() - line.getHeight());
 		}
 
 	}
-
 
 
 	public Sprite getSprite() {

@@ -11,25 +11,12 @@ import rodrigo.pongy.listener.ResetListener;
 public class Racket implements ResetListener {
 
 
-	public enum ACTIONS {
-		MOVE_UP, MOVE_DOWN
-	}
-
-	public enum POSITIONS {
-		LEFT, RIGHT,
-	}
-
-
 	private Sprite racket;
 	private float movementSpeed;
 	private float yScreenMargin;
-
 	private POSITIONS currentPosition;
-
 	private OrthographicCamera camera;
-
 	private boolean singleRacket;
-
 
 	public Racket(Texture texture, POSITIONS position, float scaleFactor, float yScreenMargin, OrthographicCamera camera, boolean singleRacket) {
 		this.camera = camera;
@@ -59,9 +46,6 @@ public class Racket implements ResetListener {
 
 	}
 
-
-	// Note: the survival racket can't be controlled, since it will act as a wall
-
 	// Movement key event listeners, should execute movement code when fired
 	public void moveUpPressed() {
 		//Gdx.app.log(this.hashCode() + "", "UP key pressed.");
@@ -79,6 +63,9 @@ public class Racket implements ResetListener {
 			racket.translate(0, -movementSpeed * Gdx.graphics.getDeltaTime());
 		}
 	}
+
+
+	// Note: the survival racket can't be controlled, since it will act as a wall
 
 	public void draggedMove(float screenNewY) {
 		// screenNewY is the new Y position for the racket, in screen coordinates
@@ -124,7 +111,6 @@ public class Racket implements ResetListener {
 		}
 	}
 
-
 	// Returns this racket's sprite object
 	public Sprite getSprite() {
 		return racket;
@@ -134,5 +120,14 @@ public class Racket implements ResetListener {
 	// getSprite().getTexture().dispose() could always be used, but this way is cleaner
 	public void dispose() {
 		racket.getTexture().dispose();
+	}
+
+
+	public enum ACTIONS {
+		MOVE_UP, MOVE_DOWN
+	}
+
+	public enum POSITIONS {
+		LEFT, RIGHT,
 	}
 }

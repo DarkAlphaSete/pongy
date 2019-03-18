@@ -2,25 +2,20 @@ package rodrigo.pongy.object;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.graphics.Texture;
 import rodrigo.pongy.listener.ResetListener;
 import rodrigo.pongy.manager.ScoreManager;
 
 public class Ball implements ResetListener {
 
+	public ScoreManager scoreManager;
 	private Sprite ball;
-
 	private Vector2 velocity;
 	private float initialSpeed;
 	private Vector2 playAreaCenter;
-
-	public ScoreManager scoreManager;
-
 	private Racket leftRacket;
 	private Racket rightRacket;
 
@@ -167,7 +162,7 @@ public class Ball implements ResetListener {
 		Vector2 newVel = new Vector2(velocity.x * factor, velocity.y * factor);
 		for (int i = 0; i < steps; i++) {
 
-			if(i + 1 == steps) {
+			if (i + 1 == steps) {
 				ball.translate(
 						newVel.x * factor * Gdx.graphics.getDeltaTime(),
 						newVel.y * factor * Gdx.graphics.getDeltaTime());

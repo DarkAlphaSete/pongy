@@ -23,7 +23,7 @@ public class GameScreenInputProcessor extends InputAdapter {
 		// If the user presses the back key, go back to the main menu
 		// The, stop catching the key, so pressing it back again quits the game
 		// The Q is for debug purposes while on PC
-		if(keycode == Input.Keys.BACK || keycode == Input.Keys.Q) {
+		if (keycode == Input.Keys.BACK || keycode == Input.Keys.Q) {
 			Gdx.input.setCatchBackKey(false);
 			game.setScreen(new MainMenuScreen(game));
 		}

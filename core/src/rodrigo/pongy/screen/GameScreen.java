@@ -53,7 +53,6 @@ public class GameScreen implements Screen {
 	private FloorDecor ceilingLine;
 
 
-
 	public GameScreen(boolean singlePlayerMode, Game game) {
 		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -86,7 +85,7 @@ public class GameScreen implements Screen {
 
 		racketInputProcessor = new RacketInputProcessor(leftRacket, rightRacket, preferencesManager, singlePlayerMode);
 
-		for(ResetListener listener: resetListeners) {
+		for (ResetListener listener : resetListeners) {
 			listener.resetGame();
 		}
 

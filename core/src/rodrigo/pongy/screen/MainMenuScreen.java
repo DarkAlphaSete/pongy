@@ -61,7 +61,7 @@ public class MainMenuScreen implements Screen {
 		batch.end();
 
 		// Check for touches to select the mode
-		if(Gdx.input.isTouched(0)) {
+		if (Gdx.input.isTouched(0)) {
 			// Check which side the user pressed (each side = a mode, as written before)
 			game.setScreen(new GameScreen(Gdx.input.getX() < camera.viewportWidth / 2, game));
 
