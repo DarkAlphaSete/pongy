@@ -44,7 +44,7 @@ public class Racket implements ResetListener {
 		// If this is a survival racket, make it the size of the screen (like a wall)
 		if (this.singleRacket) {
 			if (position == POSITIONS.RIGHT) {
-				racket.setSize(racket.getWidth(), Gdx.graphics.getHeight() * 2);
+				racket.setSize(racket.getWidth(), Gdx.graphics.getHeight());
 				racket.setPosition(Gdx.graphics.getWidth() - racket.getWidth() / 2, 0);
 			} else {
 				Gdx.app.error("Racket " + hashCode(), "Survival mode is only available for the right racket.");
