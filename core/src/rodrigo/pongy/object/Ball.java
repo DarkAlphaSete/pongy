@@ -65,8 +65,6 @@ public class Ball implements ResetListener {
 
 	private void checkCollisions() {
 
-		final float MAX_BOUNCE_ANGLE = 75;
-
 
 		// Bottom collisions
 		if (ball.getY() <= 0 && !hasBouncedOnTopBottom) {

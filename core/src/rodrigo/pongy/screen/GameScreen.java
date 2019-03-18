@@ -80,7 +80,7 @@ public class GameScreen implements Screen {
 		resetListeners.add(rightRacket);
 		resetListeners.add(ball);
 
-		scoreManager = new ScoreManager(new BitmapFont(), ball, resetListeners, singlePlayerMode);
+		scoreManager = new ScoreManager(new BitmapFont(), ball, resetListeners, singlePlayerMode, preferencesManager);
 
 		ball.scoreManager = scoreManager;
 
@@ -120,6 +120,7 @@ public class GameScreen implements Screen {
 		ceilingLine.getSprite().draw(batch);
 
 
+		scoreManager.update();
 		scoreManager.drawText(batch);
 
 		batch.end();

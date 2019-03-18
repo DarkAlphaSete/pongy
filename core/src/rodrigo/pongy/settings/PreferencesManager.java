@@ -139,4 +139,13 @@ public class PreferencesManager {
 
 		preferences.flush();
 	}
+
+	public void saveSinglePlayerBestTime(float newTime) {
+		preferences.remove("SINGLE_PLAYER_BEST_TIME");
+		preferences.putFloat("SINGLE_PLAYER_BEST_TIME", newTime);
+	}
+
+	public float getSinglePlayerBestTime() {
+		return preferences.getFloat("SINGLE_PLAYER_BEST_TIME", 0);
+	}
 }
