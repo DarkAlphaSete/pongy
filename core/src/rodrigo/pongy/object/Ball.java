@@ -1,6 +1,8 @@
 package rodrigo.pongy.object;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -25,17 +27,28 @@ public class Ball implements ResetListener {
 	private boolean hasBouncedOnSide;
 	private boolean hasBouncedOnTopBottom;
 
+	private boolean singlePlayerMode;
+
+	// No credit is needed since the sound is on the public domain (CC 0 license)
+	// but I'll throw the link to the sound here: https://freesound.org/people/michorvath/sounds/269718/
+	// I have no idea how to credit the sound
+	private Sound bounceSFX;
+
 
 	// Note: the direction the ball goes to after spawning will be random
 	// leftRacketRightEdge: left racket's right edge, used to calculate the collisions.
 	// Also used on the right racket's collision calculations, which means if they aren't symmetrical, everything screws
 	// up.
-	public Ball(Texture texture, float initialSpeed, float scaleFactor, Vector2 playAreaCenter, Racket leftRacket, Racket rightRacket) {
+	public Ball(Texture texture, float initialSpeed, float scaleFactor, Vector2 playAreaCenter, Racket leftRacket, Racket rightRacket, boolean singlePlayerMode) {
 		this.playAreaCenter = playAreaCenter;
 		this.initialSpeed = initialSpeed;
 
+		this.singlePlayerMode = singlePlayerMode;
+
 		ball = new Sprite(texture);
 		ball.setSize(ball.getWidth() * scaleFactor, ball.getHeight() * scaleFactor);
+
+		bounceSFX = Gdx.audio.newSound(Gdx.files.internal("sound/bounce.wav"));
 
 		reset();
 
@@ -57,6 +70,12 @@ public class Ball implements ResetListener {
 		int xVel = MathUtils.randomSign();
 		int yVel = MathUtils.randomSign();
 
+		// If it's a single player game, make the ball always start going left.
+		// This way the best time won't be affected by RNG.
+		if(singlePlayerMode) {
+			xVel = -1;
+		}
+
 		ball.setPosition(playAreaCenter.x - ball.getWidth() / 2, playAreaCenter.y + ball.getHeight() / 2);
 		velocity = new Vector2(xVel, yVel).scl(initialSpeed);
 
@@ -70,11 +89,15 @@ public class Ball implements ResetListener {
 		if (ball.getY() <= 0 && !hasBouncedOnTopBottom) {
 			velocity.y *= -1;
 			hasBouncedOnTopBottom = true;
+
+			bounceSFX.play(0.25f);
 		}
 		// Top collisions
 		else if (ball.getY() + ball.getHeight() >= Gdx.graphics.getHeight() && !hasBouncedOnTopBottom) {
 			velocity.y *= -1;
 			hasBouncedOnTopBottom = true;
+
+			bounceSFX.play(0.25f);
 		}
 
 		// Check if ball the as passed the middle of the screen, X
@@ -104,6 +127,8 @@ public class Ball implements ResetListener {
 				velocity.x = (velocity.x + bounceCount / 2) * -1.1f;
 
 				hasBouncedOnSide = true;
+
+				bounceSFX.play();
 			}
 		}
 		// Right collisions: racket
@@ -115,6 +140,8 @@ public class Ball implements ResetListener {
 				velocity.x = (velocity.x + bounceCount / 2) * -1.1f;
 
 				hasBouncedOnSide = true;
+
+				bounceSFX.play();
 			}
 		}
 
