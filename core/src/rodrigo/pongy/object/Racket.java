@@ -40,7 +40,7 @@ public class Racket implements ResetListener {
 
 		}
 
-		movementSpeed = Gdx.graphics.getWidth() * Gdx.graphics.getHeight() / 550f;
+		movementSpeed = (float) Gdx.graphics.getWidth() / Gdx.graphics.getHeight() * 200f;
 		this.yScreenMargin = yScreenMargin;
 
 

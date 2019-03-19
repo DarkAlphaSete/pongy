@@ -126,7 +126,7 @@ public class GameScreen implements Screen {
 
 		// dirty thingy for debug purposes
 		if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-			ball.reset(true);
+			ball.reset();
 		}
 
 	}
@@ -187,7 +187,7 @@ public class GameScreen implements Screen {
 
 		ball = new Ball(
 				new Texture("objects/ball.png"),
-				(float) Gdx.graphics.getWidth() * Gdx.graphics.getHeight() / 2000f,
+				(float) Gdx.graphics.getWidth() / Gdx.graphics.getHeight() * 125f,
 				ballScale,
 				new Vector2(
 						Gdx.graphics.getWidth() / 2f,

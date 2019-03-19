@@ -30,6 +30,8 @@ public class Ball implements ResetListener {
 	// I have no idea how to credit the sound
 	private Sound bounceSFX;
 
+	private int collisionChecksPerFrame;
+
 
 	// Note: the direction the sprite goes to after spawning will be random
 	// leftRacketRightEdge: left racket's right edge, used to calculate the collisions.
@@ -44,9 +46,13 @@ public class Ball implements ResetListener {
 		sprite = new Sprite(texture);
 		sprite.setSize(sprite.getWidth() * scaleFactor, sprite.getHeight() * scaleFactor);
 
+
 		bounceSFX = Gdx.audio.newSound(Gdx.files.internal("sound/bounce.wav"));
 
-		reset(true);
+		velocity = new Vector2(1,1).scl(initialSpeed);
+
+
+		reset();
 
 		this.leftRacket = leftRacket;
 		this.rightRacket = rightRacket;
@@ -54,14 +60,16 @@ public class Ball implements ResetListener {
 		bounceCount = 0;
 		hasBouncedOnSide = false;
 
+		collisionChecksPerFrame = 500;
+
 	}
 
 	@Override
 	public void resetGame() {
-		reset(true);
+		reset();
 	}
 
-	public void reset(boolean resetVelocity) {
+	public void reset() {
 		// Only -1 and 1 are needed, so a random boolean should do the trick
 		int xVel = MathUtils.randomSign();
 		int yVel = MathUtils.randomSign();
@@ -74,13 +82,7 @@ public class Ball implements ResetListener {
 
 		sprite.setPosition(playAreaCenter.x - sprite.getWidth() / 2, playAreaCenter.y + sprite.getHeight() / 2);
 
-		if (resetVelocity) {
-			velocity = new Vector2(xVel, yVel).scl(initialSpeed);
-		} else {
-			// If the velocity isn't going to get reset, it means it was called by the camera workaround, so make it
-			// go right to make sure the player has time to react...
-			velocity = new Vector2(Math.abs(velocity.x), velocity.y);
-		}
+		velocity = new Vector2(xVel, yVel).scl(initialSpeed);
 
 		//bounceCount /= 2;
 	}
@@ -93,14 +95,14 @@ public class Ball implements ResetListener {
 			velocity.y *= -1;
 			hasBouncedOnTopBottom = true;
 
-			bounceSFX.play(0.25f);
+			bounceSFX.play();
 		}
 		// Top collisions
 		else if (sprite.getY() + sprite.getHeight() >= Gdx.graphics.getHeight() && !hasBouncedOnTopBottom) {
 			velocity.y *= -1;
 			hasBouncedOnTopBottom = true;
 
-			bounceSFX.play(0.25f);
+			bounceSFX.play();
 		}
 
 		// Check if sprite the as passed the middle of the screen, X
@@ -157,22 +159,19 @@ public class Ball implements ResetListener {
 
 		// Workaround to too-fast balls: translate n% n times and check between each translation
 		// No human player is going to last until this system breaks... hopefully...
-		int steps = 50;
-		float factor = 1f / steps;
-		Vector2 newVel = new Vector2(velocity.x * factor, velocity.y * factor);
-		for (int i = 0; i < steps; i++) {
+		float factor = 1f / collisionChecksPerFrame;
 
-			if (i + 1 == steps) {
-				sprite.translate(
-						newVel.x * factor * Gdx.graphics.getDeltaTime(),
-						newVel.y * factor * Gdx.graphics.getDeltaTime());
-				checkCollisions();
-			} else {
-				sprite.translate(
-						newVel.x * factor,
-						newVel.y * factor);
-				checkCollisions();
-			}
+		Vector2 newVel = new Vector2(
+				velocity.x * Gdx.graphics.getDeltaTime(),
+				velocity.y * Gdx.graphics.getDeltaTime());
+
+		for (int i = 0; i < collisionChecksPerFrame; i++) {
+
+			sprite.translate(
+					newVel.x * factor,
+					newVel.y * factor);
+
+			checkCollisions();
 
 		}
 
