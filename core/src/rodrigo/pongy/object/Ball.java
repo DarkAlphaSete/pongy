@@ -70,6 +70,8 @@ public class Ball implements ResetListener {
 	}
 
 	public void reset() {
+		float initialSpeed = this.initialSpeed;
+
 		// Only -1 and 1 are needed, so a random boolean should do the trick
 		float xVel = MathUtils.randomSign() * MathUtils.random(0.1f, 2);
 		float yVel = MathUtils.randomSign() * MathUtils.random(0.1f, 0.5f);
@@ -77,11 +79,18 @@ public class Ball implements ResetListener {
 		// If it's a single player game, make the sprite always start going left.
 		// This way the best time won't be affected by RNG.
 		if (singlePlayerMode) {
-			xVel = MathUtils.random(0.2f,1f);
-			yVel = MathUtils.random(0.2f,1f) * MathUtils.randomSign();
+			xVel = MathUtils.random(0.2f, 1f);
+			yVel = MathUtils.random(0.2f, 1f) * MathUtils.randomSign();
 		}
 
 		sprite.setPosition(playAreaCenter.x - sprite.getWidth() / 2, playAreaCenter.y + sprite.getHeight() / 2);
+
+		// Stupid and lazy way to balance out speeds on high-res devices
+		// fixing problems created by laziness (using resolution on physics) by more laziness! yay!
+		if (Gdx.graphics.getWidth() * Gdx.graphics.getHeight() > 750000) {
+			initialSpeed *= 3;
+		}
+
 
 		velocity = new Vector2(xVel, yVel).nor().scl(initialSpeed);
 
