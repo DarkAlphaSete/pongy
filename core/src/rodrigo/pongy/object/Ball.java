@@ -72,7 +72,7 @@ public class Ball implements ResetListener {
 	public void reset() {
 		// Only -1 and 1 are needed, so a random boolean should do the trick
 		int xVel = MathUtils.randomSign() * MathUtils.random(1, 2);
-		int yVel = MathUtils.randomSign() * MathUtils.random(1, 2);
+		int yVel = MathUtils.randomSign();
 
 		// If it's a single player game, make the sprite always start going left.
 		// This way the best time won't be affected by RNG.
