@@ -12,7 +12,7 @@ import rodrigo.pongy.manager.ScoreManager;
 public class Ball implements ResetListener {
 
 	public ScoreManager scoreManager;
-	private Sprite ball;
+	private Sprite sprite;
 	private Vector2 velocity;
 	private float initialSpeed;
 	private Vector2 playAreaCenter;
@@ -31,7 +31,7 @@ public class Ball implements ResetListener {
 	private Sound bounceSFX;
 
 
-	// Note: the direction the ball goes to after spawning will be random
+	// Note: the direction the sprite goes to after spawning will be random
 	// leftRacketRightEdge: left racket's right edge, used to calculate the collisions.
 	// Also used on the right racket's collision calculations, which means if they aren't symmetrical, everything screws
 	// up.
@@ -41,8 +41,8 @@ public class Ball implements ResetListener {
 
 		this.singlePlayerMode = singlePlayerMode;
 
-		ball = new Sprite(texture);
-		ball.setSize(ball.getWidth() * scaleFactor, ball.getHeight() * scaleFactor);
+		sprite = new Sprite(texture);
+		sprite.setSize(sprite.getWidth() * scaleFactor, sprite.getHeight() * scaleFactor);
 
 		bounceSFX = Gdx.audio.newSound(Gdx.files.internal("sound/bounce.wav"));
 
@@ -66,13 +66,13 @@ public class Ball implements ResetListener {
 		int xVel = MathUtils.randomSign();
 		int yVel = MathUtils.randomSign();
 
-		// If it's a single player game, make the ball always start going left.
+		// If it's a single player game, make the sprite always start going left.
 		// This way the best time won't be affected by RNG.
 		if (singlePlayerMode) {
 			xVel = -1;
 		}
 
-		ball.setPosition(playAreaCenter.x - ball.getWidth() / 2, playAreaCenter.y + ball.getHeight() / 2);
+		sprite.setPosition(playAreaCenter.x - sprite.getWidth() / 2, playAreaCenter.y + sprite.getHeight() / 2);
 
 		if (resetVelocity) {
 			velocity = new Vector2(xVel, yVel).scl(initialSpeed);
@@ -89,42 +89,42 @@ public class Ball implements ResetListener {
 
 
 		// Bottom collisions
-		if (ball.getY() <= 0 && !hasBouncedOnTopBottom) {
+		if (sprite.getY() <= 0 && !hasBouncedOnTopBottom) {
 			velocity.y *= -1;
 			hasBouncedOnTopBottom = true;
 
 			bounceSFX.play(0.25f);
 		}
 		// Top collisions
-		else if (ball.getY() + ball.getHeight() >= Gdx.graphics.getHeight() && !hasBouncedOnTopBottom) {
+		else if (sprite.getY() + sprite.getHeight() >= Gdx.graphics.getHeight() && !hasBouncedOnTopBottom) {
 			velocity.y *= -1;
 			hasBouncedOnTopBottom = true;
 
 			bounceSFX.play(0.25f);
 		}
 
-		// Check if ball the as passed the middle of the screen, X
-		if (ball.getX() > Gdx.graphics.getWidth() / 2 - ball.getWidth() && ball.getX() < Gdx.graphics.getWidth() / 2 + ball.getWidth()) {
+		// Check if sprite the as passed the middle of the screen, X
+		if (sprite.getX() > Gdx.graphics.getWidth() / 2 - sprite.getWidth() && sprite.getX() < Gdx.graphics.getWidth() / 2 + sprite.getWidth()) {
 			hasBouncedOnSide = false;
 		}
-		// Check if the ball has passed the middle of the screen, Y
-		if (ball.getY() > Gdx.graphics.getHeight() / 2 - ball.getHeight() && ball.getY() < Gdx.graphics.getHeight() / 2 + ball.getHeight()) {
+		// Check if the sprite has passed the middle of the screen, Y
+		if (sprite.getY() > Gdx.graphics.getHeight() / 2 - sprite.getHeight() && sprite.getY() < Gdx.graphics.getHeight() / 2 + sprite.getHeight()) {
 			hasBouncedOnTopBottom = false;
 		}
 
 		// Left collisions: goal
-		if (ball.getX() <= 0 + leftRacket.getSprite().getX() && !hasBouncedOnSide) {
+		if (sprite.getX() <= 0 + leftRacket.getSprite().getX() && !hasBouncedOnSide) {
 			scoreManager.score(Racket.POSITIONS.LEFT);
 		}
 		// Right collisions: goal
-		else if (ball.getX() >= rightRacket.getSprite().getX() + rightRacket.getSprite().getWidth() && !hasBouncedOnSide) {
+		else if (sprite.getX() >= rightRacket.getSprite().getX() + rightRacket.getSprite().getWidth() && !hasBouncedOnSide) {
 			scoreManager.score(Racket.POSITIONS.RIGHT);
 		}
 
 		// Left collisions: racket
-		if (ball.getX() < leftRacket.getSprite().getX() + leftRacket.getSprite().getWidth() && !hasBouncedOnSide) {
+		if (sprite.getX() < leftRacket.getSprite().getX() + leftRacket.getSprite().getWidth() && !hasBouncedOnSide) {
 			// Check if it's within the racket's coordinates
-			if (ball.getY() > leftRacket.getSprite().getY() && ball.getY() + ball.getHeight() < leftRacket.getSprite().getY() + leftRacket.getSprite().getHeight()) {
+			if (sprite.getY() > leftRacket.getSprite().getY() && sprite.getY() + sprite.getHeight() < leftRacket.getSprite().getY() + leftRacket.getSprite().getHeight()) {
 				bounceCount++;
 
 				velocity.x = (velocity.x + bounceCount / 2) * -1.1f;
@@ -135,9 +135,9 @@ public class Ball implements ResetListener {
 			}
 		}
 		// Right collisions: racket
-		else if (ball.getX() + ball.getWidth() > rightRacket.getSprite().getX() && !hasBouncedOnSide) {
+		else if (sprite.getX() + sprite.getWidth() > rightRacket.getSprite().getX() && !hasBouncedOnSide) {
 			// Check if it's within the racket's coordinates
-			if (ball.getY() > rightRacket.getSprite().getY() && ball.getY() + ball.getHeight() < rightRacket.getSprite().getY() + rightRacket.getSprite().getHeight()) {
+			if (sprite.getY() > rightRacket.getSprite().getY() && sprite.getY() + sprite.getHeight() < rightRacket.getSprite().getY() + rightRacket.getSprite().getHeight()) {
 				bounceCount++;
 
 				velocity.x = (velocity.x + bounceCount / 2) * -1.1f;
@@ -163,12 +163,12 @@ public class Ball implements ResetListener {
 		for (int i = 0; i < steps; i++) {
 
 			if (i + 1 == steps) {
-				ball.translate(
+				sprite.translate(
 						newVel.x * factor * Gdx.graphics.getDeltaTime(),
 						newVel.y * factor * Gdx.graphics.getDeltaTime());
 				checkCollisions();
 			} else {
-				ball.translate(
+				sprite.translate(
 						newVel.x * factor,
 						newVel.y * factor);
 				checkCollisions();
@@ -178,7 +178,7 @@ public class Ball implements ResetListener {
 
 		// Now, add the delta time
 /*
-		ball.translate(
+		sprite.translate(
 				Gdx.graphics.getDeltaTime() * factor,
 				Gdx.graphics.getDeltaTime() * factor);
 		checkCollisions();*/
@@ -189,12 +189,12 @@ public class Ball implements ResetListener {
 	// Useful functions
 
 	public Sprite getSprite() {
-		return ball;
+		return sprite;
 	}
 
 
 	// Cleaner than getSprite().getTexture().dispose()
 	public void dispose() {
-		ball.getTexture().dispose();
+		sprite.getTexture().dispose();
 	}
 }

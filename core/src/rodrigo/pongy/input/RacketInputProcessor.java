@@ -42,20 +42,25 @@ public class RacketInputProcessor {
 		}
 
 		// Right racket
-		// Unnecessary check, because the racket itself has disabled movement if it's a survival racket, but maybe
-		// this saves some resources...
-		if (!singlePlayerMode) {
-			if (Gdx.input.isKeyPressed(
-					preferencesManager.getRacketControl(
-							Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_DOWN))) {
+		if (Gdx.input.isKeyPressed(
+				preferencesManager.getRacketControl(
+						Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_DOWN))) {
 
+			// Make the right racket's controls work on the left one if single player mode is enabled
+			if (!singlePlayerMode) {
 				rightRacket.moveDownPressed();
+			} else {
+				leftRacket.moveDownPressed();
 			}
-			if (Gdx.input.isKeyPressed(
-					preferencesManager.getRacketControl(
-							Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_UP))) {
-
+		}
+		if (Gdx.input.isKeyPressed(
+				preferencesManager.getRacketControl(
+						Racket.POSITIONS.RIGHT, Racket.ACTIONS.MOVE_UP))) {
+			// Make the right racket's controls work on the left one if single player mode is enabled
+			if (!singlePlayerMode) {
 				rightRacket.moveUpPressed();
+			} else {
+				leftRacket.moveUpPressed();
 			}
 		}
 

@@ -11,7 +11,7 @@ import rodrigo.pongy.listener.ResetListener;
 public class Racket implements ResetListener {
 
 
-	private Sprite racket;
+	private Sprite sprite;
 	private float movementSpeed;
 	private float yScreenMargin;
 	private POSITIONS currentPosition;
@@ -21,20 +21,20 @@ public class Racket implements ResetListener {
 	public Racket(Texture texture, POSITIONS position, float scaleFactor, float yScreenMargin, OrthographicCamera camera, boolean singleRacket) {
 		this.camera = camera;
 
-		racket = new Sprite(texture);
-		racket.setSize(racket.getWidth() * scaleFactor, racket.getHeight() * scaleFactor);
+		sprite = new Sprite(texture);
+		sprite.setSize(sprite.getWidth() * scaleFactor, sprite.getHeight() * scaleFactor);
 
 		currentPosition = position;
 
 		this.singleRacket = singleRacket;
 
-		// If this is a survival racket, make it the size of the screen (like a wall)
+		// If this is a survival sprite, make it the size of the screen (like a wall)
 		if (this.singleRacket) {
 			if (position == POSITIONS.RIGHT) {
-				racket.setSize(racket.getWidth(), Gdx.graphics.getHeight());
-				racket.setPosition(Gdx.graphics.getWidth() - racket.getWidth() / 2, 0);
+				sprite.setSize(sprite.getWidth(), Gdx.graphics.getHeight());
+				sprite.setPosition(Gdx.graphics.getWidth() - sprite.getWidth() / 2, 0);
 			} else {
-				Gdx.app.error("Racket " + hashCode(), "Survival mode is only available for the right racket.");
+				Gdx.app.error("Racket " + hashCode(), "Survival mode is only available for the right sprite.");
 				Gdx.app.exit();
 			}
 
@@ -49,28 +49,28 @@ public class Racket implements ResetListener {
 	// Movement key event listeners, should execute movement code when fired
 	public void moveUpPressed() {
 		//Gdx.app.log(this.hashCode() + "", "UP key pressed.");
-		// Check if the racket is within screen bounds
-		if (!singleRacket && racket.getY() < Gdx.graphics.getHeight() - racket.getHeight() - yScreenMargin) {
-			racket.translate(0, movementSpeed * Gdx.graphics.getDeltaTime());
+		// Check if the sprite is within screen bounds
+		if (!singleRacket && sprite.getY() < Gdx.graphics.getHeight() - sprite.getHeight() - yScreenMargin) {
+			sprite.translate(0, movementSpeed * Gdx.graphics.getDeltaTime());
 		}
 	}
 
 	public void moveDownPressed() {
 		//Gdx.app.log(this.hashCode() + "", "DOWN key pressed.");
 
-		// Check if the racket is within screen bounds
-		if (!singleRacket && racket.getY() - yScreenMargin > 0) {
-			racket.translate(0, -movementSpeed * Gdx.graphics.getDeltaTime());
+		// Check if the sprite is within screen bounds
+		if (!singleRacket && sprite.getY() - yScreenMargin > 0) {
+			sprite.translate(0, -movementSpeed * Gdx.graphics.getDeltaTime());
 		}
 	}
 
 
-	// Note: the survival racket can't be controlled, since it will act as a wall
+	// Note: the survival sprite can't be controlled, since it will act as a wall
 
 	public void draggedMove(float screenNewY) {
-		// screenNewY is the new Y position for the racket, in screen coordinates
+		// screenNewY is the new Y position for the sprite, in screen coordinates
 
-		// Extra checks are made to make sure the player drags the racket around instead of "teleporting" it
+		// Extra checks are made to make sure the player drags the sprite around instead of "teleporting" it
 		// to wherever he wants / finds useful (like where the ball is)
 
 		Vector3 newPosition = camera.unproject(new Vector3(
@@ -80,7 +80,7 @@ public class Racket implements ResetListener {
 		));
 
 		if (!singleRacket) {
-			racket.setPosition(racket.getX(), newPosition.y + racket.getHeight() * 1.25f);
+			sprite.setPosition(sprite.getX(), newPosition.y + sprite.getHeight() * 1.25f);
 		}
 
 	}
@@ -95,31 +95,31 @@ public class Racket implements ResetListener {
 		switch (currentPosition) {
 
 			case LEFT:
-				racket.setPosition(racket.getWidth() / 4, Gdx.graphics.getHeight() / 2f - racket.getHeight() / 2);
+				sprite.setPosition(sprite.getWidth() / 4, Gdx.graphics.getHeight() / 2f - sprite.getHeight() / 2);
 				break;
 
 			case RIGHT:
 				if (!singleRacket) {
-					racket.setPosition(Gdx.graphics.getWidth() - racket.getWidth() - racket.getWidth() / 4, Gdx.graphics.getHeight() / 2f - racket.getHeight() / 2);
+					sprite.setPosition(Gdx.graphics.getWidth() - sprite.getWidth() - sprite.getWidth() / 4, Gdx.graphics.getHeight() / 2f - sprite.getHeight() / 2);
 				}
 				break;
 
 			default:
-				Gdx.app.error("Racket " + hashCode(), "Invalid racket position");
+				Gdx.app.error("Racket " + hashCode(), "Invalid sprite position");
 				Gdx.app.exit();
 				break;
 		}
 	}
 
-	// Returns this racket's sprite object
+	// Returns this sprite's sprite object
 	public Sprite getSprite() {
-		return racket;
+		return sprite;
 	}
 
 	// Shortcut to dispose
 	// getSprite().getTexture().dispose() could always be used, but this way is cleaner
 	public void dispose() {
-		racket.getTexture().dispose();
+		sprite.getTexture().dispose();
 	}
 
 

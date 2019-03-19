@@ -49,8 +49,8 @@ public class GameScreen implements Screen {
 
 	private boolean singlePlayerMode;
 
-	private FloorDecor floorLine;
-	private FloorDecor ceilingLine;
+	private FloorDecor floorSprite;
+	private FloorDecor ceilingSprite;
 
 
 	public GameScreen(boolean singlePlayerMode, Game game) {
@@ -115,8 +115,8 @@ public class GameScreen implements Screen {
 
 		ball.getSprite().draw(batch);
 
-		floorLine.getSprite().draw(batch);
-		ceilingLine.getSprite().draw(batch);
+		floorSprite.getSprite().draw(batch);
+		ceilingSprite.getSprite().draw(batch);
 
 
 		scoreManager.update();
@@ -158,8 +158,8 @@ public class GameScreen implements Screen {
 		leftRacket.dispose();
 		rightRacket.dispose();
 
-		floorLine.dispose();
-		ceilingLine.dispose();
+		floorSprite.dispose();
+		ceilingSprite.dispose();
 
 		ball.dispose();
 
@@ -195,8 +195,8 @@ public class GameScreen implements Screen {
 				leftRacket, rightRacket,
 				singlePlayerMode);
 
-		floorLine = new FloorDecor(new Texture("objects/ball.png"), true);
-		ceilingLine = new FloorDecor(new Texture("objects/ball.png"), false);
+		floorSprite = new FloorDecor(new Texture("objects/ball.png"), true);
+		ceilingSprite = new FloorDecor(new Texture("objects/ball.png"), false);
 
 	}
 

@@ -6,35 +6,35 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class FloorDecor {
 
-	private Sprite line;
+	private Sprite sprite;
 
 
 	// If it's not a floor, then it becomes a ceiling by the way!
-	// This just renders a line on the top and bottom to give the impression that there's a limit
+	// This just renders a sprite on the top and bottom to give the impression that there's a limit
 	// to the play area.
 	// Yes, 1 pixel is enough when it's white against black!
 	public FloorDecor(Texture texture, boolean isFloor) {
-		line = new Sprite(texture);
+		sprite = new Sprite(texture);
 
-		line.setPosition(0, 0);
+		sprite.setPosition(0, 0);
 
-		line.setScale(Gdx.graphics.getWidth() * 2, 1);
+		sprite.setScale(Gdx.graphics.getWidth() * 2, 1);
 
 		if (!isFloor) {
 			// If it's not a floor, throw it to the ceiling!
-			line.setPosition(0, Gdx.graphics.getHeight() - line.getHeight());
+			sprite.setPosition(0, Gdx.graphics.getHeight() - sprite.getHeight());
 		}
 
 	}
 
 
 	public Sprite getSprite() {
-		return line;
+		return sprite;
 	}
 
 
 	// Blah blah blah .getSprite blah blah other scripts blah blah
 	public void dispose() {
-		line.getTexture().dispose();
+		sprite.getTexture().dispose();
 	}
 }
