@@ -77,7 +77,7 @@ public class Ball implements ResetListener {
 		// If it's a single player game, make the sprite always start going left.
 		// This way the best time won't be affected by RNG.
 		if (singlePlayerMode) {
-			xVel = -Math.abs(xVel);
+			xVel = Math.abs(xVel);
 		}
 
 		sprite.setPosition(playAreaCenter.x - sprite.getWidth() / 2, playAreaCenter.y + sprite.getHeight() / 2);
