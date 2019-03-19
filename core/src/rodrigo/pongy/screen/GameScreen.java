@@ -67,7 +67,7 @@ public class GameScreen implements Screen {
 		this.singlePlayerMode = singlePlayerMode;
 
 		batch = new SpriteBatch();
-		preferencesManager = new PreferencesManager("Pongy");
+		preferencesManager = new PreferencesManager("rodrigo.pongy");
 
 		preferencesManager.setUpDefaultControls(false);
 
