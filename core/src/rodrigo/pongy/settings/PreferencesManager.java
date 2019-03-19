@@ -143,6 +143,7 @@ public class PreferencesManager {
 	public void saveSinglePlayerBestTime(float newTime) {
 		preferences.remove("SINGLE_PLAYER_BEST_TIME");
 		preferences.putFloat("SINGLE_PLAYER_BEST_TIME", newTime);
+		preferences.flush();
 	}
 
 	public float getSinglePlayerBestTime() {
